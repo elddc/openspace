@@ -3,7 +3,7 @@ from typing import List, Optional
 import datetime
 from sqlalchemy.orm import Mapped, mapped_column, relationship, DeclarativeBase
 from sqlalchemy.sql import func
-from sqlalchemy.types import DateTime
+from sqlalchemy.types import DateTime, SmallInteger
 from sqlalchemy import ForeignKey
 import uuid
 
@@ -16,8 +16,8 @@ class Building(Base):
     address: Mapped[Optional[str]]
     location: Mapped[Optional[str]]
     capacity: Mapped[Optional[str]]
-    busyness: Mapped[str]
-    
+    busyness = mapped_column(SmallInteger)
+
     rooms: Mapped[List["Room"]] = relationship(back_populates="building")
 
     inputs: Mapped[List["Input"]] = relationship(back_populates="building")
@@ -31,7 +31,7 @@ class Room(Base):
     __tablename__="room"
     building_id = mapped_column(ForeignKey("building.id"), primary_key=True)
     room_number: Mapped[int] = mapped_column(primary_key=True)
-    busyness: Mapped[str]
+    busyness = mapped_column(SmallInteger)
 
     building: Mapped[Building] = relationship(back_populates="rooms")
     
@@ -42,10 +42,11 @@ class Input(Base):
     __tablename__="input"
     id: Mapped[uuid.UUID] = mapped_column(primary_key=True, default=uuid.uuid4())
     building_id = mapped_column(ForeignKey("building.id"))
-    busyness: Mapped[str]
+    busyness = mapped_column(SmallInteger)
 
     building: Mapped[Building] = relationship(back_populates="inputs")
-
+    
+    time_created: Mapped[datetime.datetime] = mapped_column(server_default=func.now())
     def __repr__(self) -> str:
         return f"Input(id={self.id!r}, busyness={self.busyness!r})"
 
