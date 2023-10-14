@@ -7,11 +7,14 @@ const Button = ({text}) => {
 
     useEffect(() => {
         // setCount(12);
-        axios.get("http://127.0.0.1:5000/bar").then(res => console.log(res))
+        axios.get("http://127.0.0.1:5000/bar", {params: {
+                "building": 0,
+                "busyness": 5
+            }}).then(res => console.log(res))
     }, []);
 
     const foo = () => {
-        axios.post("http://127.0.0.1:5000/foo", {"a": "b"})
+        axios.post("http://127.0.0.1:5000/foo", {"building": 0})
             .then(res => console.log(res))
             .catch(err => console.log(err));
     }
