@@ -6,8 +6,10 @@ CORS(app)
 
 @app.post("/foo")
 def foo():
-    return request.json["building"]
+    # post requests can access data with request.json[key]
+    return str(request.json["busyness"])
 
 @app.get("/bar")
 def bar():
-    return request.args.get("building")
+    # get requests can access data with request.args.get(key)
+    return str(request.args.get("building"))
