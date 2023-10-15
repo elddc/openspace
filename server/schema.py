@@ -1,4 +1,3 @@
-
 from typing import List, Optional
 import datetime
 from sqlalchemy.orm import Mapped, mapped_column, relationship, DeclarativeBase
@@ -34,7 +33,7 @@ class Room(Base):
     busyness = mapped_column(SmallInteger)
 
     building: Mapped[Building] = relationship(back_populates="rooms")
-    
+
     def __repr__(self) -> str:
         return f"Room(room_number={self.room_number!r}, busyness={self.busyness!r})"
 
@@ -45,13 +44,13 @@ class Input(Base):
     busyness = mapped_column(SmallInteger)
 
     building: Mapped[Building] = relationship(back_populates="inputs")
-    
+
     time_created: Mapped[datetime.datetime] = mapped_column(server_default=func.now())
     def __repr__(self) -> str:
         return f"Input(id={self.id!r}, busyness={self.busyness!r})"
 
 
-    
+
 
 
 
