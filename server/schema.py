@@ -12,6 +12,7 @@ class Base(DeclarativeBase):
 class Building(Base):
     __tablename__="building"
     id: Mapped[uuid.UUID] = mapped_column(primary_key=True, default=uuid.uuid4())
+    name: Mapped[str] = mapped_column(primary_key=True)
     address: Mapped[Optional[str]]
     location: Mapped[Optional[str]]
     capacity: Mapped[Optional[str]]
