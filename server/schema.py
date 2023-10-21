@@ -22,7 +22,7 @@ class Building(Base):
 
     inputs: Mapped[List["Input"]] = relationship(back_populates="building")
 
-    last_updated: Mapped[datetime.datetime]= mapped_column(onupdate=func.now())
+    last_updated: Mapped[datetime.datetime]= mapped_column(oncreate=func.now(), onupdate=func.now())
 
     def __repr__(self) -> str:
         return f"User(id={self.id!r}, address={self.address!r}, location={self.location!r}, capacity={self.capacity!r}, busyness={self.busyness!r}, last_updated={self.last_updated!r})"
