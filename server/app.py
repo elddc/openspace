@@ -14,23 +14,62 @@ db.init_app(app)
 
 CORS(app) # not needed for prod
 
+@app.update("/update")
+def update():
+    data = db.session.execute(
+        db.select(model.Building).where(model.Building.name == request.json["name"])
+    ).scalar()
+    data.busyness = request.json["busyness"]
+    db.session.commit()
+    return str(request.json["busyness"])
+
 @app.post("/foo")
 def foo():
-    # db.session.add(model.Building(
+    # db.session.add(model.Input(
     #     name = "CIF",
-    #     address = "1405 W. Springfield",
     #     busyness = request.json["busyness"],
     # ))
     # print(db.session.new)
     # db.session.commit()
 
     # post requests can access data with request.json[key]
+    # __tablename__
+    # id
+    # name
+    # address
+    # location
+    # capacity
+    # busyness
+    # rooms
+    # inputs
+    # last_updated
+
+    # building_id
+    # room_number
+    # busyness
+
+
+    # with Session(engine) as session:
+    user = model.Building(
+        # id="",
+        name=str(request.json["name"]),
+        address=str(request.json["address"]),
+        location=str(request.json["location"]),
+        capacity=str(request.json["capacity"]),
+        busyness=int(request.json["busyness"]),
+
+        # last_updated="",
+    )
+    db.session.add(user)
+
+    db.session.flush()
     return str(request.json["busyness"])
 
 @app.get("/bar")
 def bar():
     data = db.session.execute(db.select(model.Building))
-    print(data)
+    for d in data:
+        print(d)
 
     # get requests can access data with request.args.get(key)
     return str(request.args.get("building"))
