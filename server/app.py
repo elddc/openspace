@@ -16,6 +16,8 @@ CORS(app) # not needed for prod
 
 @app.post("/foo")
 def foo():
+    # CREATE
+    
     # db.session.add(model.Building(
     #     name = "CIF",
     #     address = "1405 W. Springfield",
@@ -58,7 +60,14 @@ def foo():
     print(user.id)
     db.session.commit()
     print(user.id)
+    input = model.Input(
+        busyness= int(request.json["busyness"])
+    )
+    db.session.add(input)
+    db.session.commit()
     return str(request.json["busyness"])
+
+# UPDATE: get object name, update as shown above (input)
 
 @app.get("/bar")
 def bar():
