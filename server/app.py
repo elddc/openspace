@@ -44,17 +44,20 @@ def foo():
     # with Session(engine) as session:
     user = model.Building(
         # id="",
-        name=str(request.json["name"]),
-        address=str(request.json["address"]),
-        location=str(request.json["location"]),
-        capacity=str(request.json["capacity"]),
-        busyness=SmallInteger(request.json["busyness"]),
-        
+        # name=str(request.json["name"]),
+        # address=str(request.json["address"]),
+        # location=str(request.json["location"]),
+        # capacity=str(request.json["capacity"]),
+        # busyness= int(request.json["busyness"]),
+        name="andrew",
+        busyness=3
+
         # last_updated="",
     )
     db.session.add(user)
-
-    db.session.flush()
+    print(user.id)
+    db.session.commit()
+    print(user.id)
     return str(request.json["busyness"])
 
 @app.get("/bar")
