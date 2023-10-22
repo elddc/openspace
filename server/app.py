@@ -14,7 +14,7 @@ db.init_app(app)
 
 CORS(app) # not needed for prod
 
-@app.update("/update")
+@app.post("/update")
 def update():
     data = db.session.execute(
         db.select(model.Building).where(model.Building.name == request.json["name"])
@@ -22,6 +22,14 @@ def update():
     data.busyness = request.json["busyness"]
     db.session.commit()
     return str(request.json["busyness"])
+
+
+@app.get("/building")
+def building():
+    data = db.session.execute(
+        db.select(model.Building).where(model.Building.name == request.args.get("name"))
+    ).scalar()
+    return str(data.busyness)
 
 @app.post("/foo")
 def foo():
@@ -31,22 +39,6 @@ def foo():
     # ))
     # print(db.session.new)
     # db.session.commit()
-
-    # post requests can access data with request.json[key]
-    # __tablename__
-    # id
-    # name
-    # address
-    # location
-    # capacity
-    # busyness
-    # rooms
-    # inputs
-    # last_updated
-
-    # building_id
-    # room_number
-    # busyness
 
 
     # with Session(engine) as session:
