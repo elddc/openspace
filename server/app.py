@@ -6,8 +6,8 @@ import os
 from dotenv import load_dotenv
 import schema as model
 
-from datetime import datetime
-now = datetime.now()
+from datetime import datetime   # --> Added to support post method
+now = datetime.now()            # --> Added to support post method
 
 load_dotenv()
 db = SQLAlchemy(model_class=model.Base)
@@ -29,7 +29,7 @@ def post():
         #busyness=int(request.json["busyness"]),
         name="Andrew",
         busyness=3,
-        last_updated=now
+        last_updated=now    # --> I can't seem to add add user to the database without setting this....
     )
     db.session.add(user)
     print(user.id)
@@ -55,7 +55,7 @@ def get():
 
 
 # Update/PATCH
-@app.patch("/update")
+@app.patch("/update")   # --> Need new button for testing ? Current button onClick is for post
 def patch():
     data = db.session.execute(
         db.select(model.Building).where(model.Building.name == request.json["name"])
