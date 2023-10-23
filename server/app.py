@@ -6,6 +6,9 @@ import os
 from dotenv import load_dotenv
 import schema as model
 
+from datetime import datetime
+now = datetime.now()
+
 load_dotenv()
 db = SQLAlchemy(model_class=model.Base)
 app = Flask(__name__)
@@ -14,8 +17,46 @@ db.init_app(app)
 
 CORS(app) # not needed for prod
 
-@app.update("/update")
-def update():
+
+# Create/POST
+@app.post("/foo")
+def post():
+    user = model.Building(
+        #name=str(request.json["name"]),
+        #address=str(request.json["address"]),
+        #location=str(request.json["location"]),
+        #capacity=str(request.json["capacity"]),
+        #busyness=int(request.json["busyness"]),
+        name="Andrew",
+        busyness=3,
+        last_updated=now
+    )
+    db.session.add(user)
+    print(user.id)
+    db.session.commit()
+    print(user.id)
+    #input = model.Input(
+    #    busyness= int(request.json["busyness"])
+    #)
+    #db.session.add(input)
+    #db.session.commit()
+    return str(request.json["busyness"])
+
+
+# Read/GET
+@app.get("/bar")
+def get():
+    data = db.session.execute(db.select(model.Building))
+    for d in data:
+        print(d)
+
+    # get requests can access data with request.args.get(key)
+    return str(request.args.get("building"))
+
+
+# Update/PATCH
+@app.patch("/update")
+def patch():
     data = db.session.execute(
         db.select(model.Building).where(model.Building.name == request.json["name"])
     ).scalar()
@@ -23,10 +64,17 @@ def update():
     db.session.commit()
     return str(request.json["busyness"])
 
-@app.post("/foo")
-def foo():
-    # CREATE
-    
+
+# Delete/DELETE
+# TO BE IMPLEMENTED (?)
+
+
+'''
+NOTES:
+    Access data with request.json[key]
+    e.g. to access "busyness" from server, use request.json["busyness"]
+
+
     # db.session.add(model.Building(
     # db.session.add(model.Input(
     #     name = "CIF",
@@ -34,53 +82,4 @@ def foo():
     # ))
     # print(db.session.new)
     # db.session.commit()
-
-    # post requests can access data with request.json[key]
-    # __tablename__
-    # id
-    # name
-    # address
-    # location
-    # capacity
-    # busyness
-    # rooms
-    # inputs
-    # last_updated
-
-    # building_id
-    # room_number
-    # busyness
-
-
-    # with Session(engine) as session:
-    user = model.Building(
-        # id="",
-        name=str(request.json["name"]),
-        address=str(request.json["address"]),
-        location=str(request.json["location"]),
-        capacity=str(request.json["capacity"]),
-        busyness=int(request.json["busyness"]),
-
-        # last_updated="",
-    )
-    db.session.add(user)
-    print(user.id)
-    db.session.commit()
-    print(user.id)
-    input = model.Input(
-        busyness= int(request.json["busyness"])
-    )
-    db.session.add(input)
-    db.session.commit()
-    return str(request.json["busyness"])
-
-# UPDATE: get object name, update as shown above (input)
-
-@app.get("/bar")
-def bar():
-    data = db.session.execute(db.select(model.Building))
-    for d in data:
-        print(d)
-
-    # get requests can access data with request.args.get(key)
-    return str(request.args.get("building"))
+'''
