@@ -1,4 +1,5 @@
 import {useState, useEffect} from "react";
+import Slider from "./Slider";
 import Button from "./Button";
 import axios from "axios";
 
@@ -36,6 +37,7 @@ const Form = ({text}) => {
 
     return <div>
         <p>{building}: {busyness * 20}% full</p>
+        <Slider value={busyness} setValue={setBusyness}/>
         <div className="row">
             <Button text={"Increase busyness"} callback={() => setBusyness(Math.min(busyness + 1, 5))}/>
             <Button text={"Decrease busyness"} callback={() => setBusyness(Math.max(busyness - 1, 0))}/>
