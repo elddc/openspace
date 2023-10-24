@@ -6,8 +6,6 @@ import os
 from dotenv import load_dotenv
 import schema as model
 
-# from datetime import datetime   # --> Added to support post method
-# now = datetime.now()            # --> Added to support post method
 
 load_dotenv()
 db = SQLAlchemy(model_class=model.Base)
@@ -17,31 +15,29 @@ db.init_app(app)
 
 CORS(app) # not needed for prod
 
+# https://docs.sqlalchemy.org/en/20/tutorial/orm_data_manipulation.html
 
 # Create/POST
-# NEEDS FIXING (?)
+# Needs review
 @app.post("/post")
 def post():
-    user = model.Building(
+    # Create a building and add it to the database
+    # Database will automatically generate and add uuid for building (generated based on name?)
+    building = model.Building(
         #name=str(request.json["name"]),
         #address=str(request.json["address"]),
         #location=str(request.json["location"]),
         #capacity=str(request.json["capacity"]),
         #busyness=int(request.json["busyness"]),
-        name="Andrew",
+        name="test",
         busyness=3,
-        # last_updated=now    # --> I can't seem to add add user to the database without setting this....
     )
-    db.session.add(user)
-    print(user.id)
+    db.session.add(building)
     db.session.commit()
-    print(user.id)
-    #input = model.Input(
-    #    busyness= int(request.json["busyness"])
-    #)
-    #db.session.add(input)
-    #db.session.commit()
-    return str(request.json["busyness"])
+    # Set the busyness of the building and add to appropriate row of database
+    building.busyness = int(request.json["busyness"])
+    db.session.commit()
+    return building.busyness
 
 
 # Read/GET
@@ -56,20 +52,18 @@ def get():
 
 
 # Update/PATCH
-# NEEDS FIXING (?)
+# Needs review
 @app.patch("/patch")
 def patch():
-    data = db.session.execute(
-        db.select(model.Building).where(model.Building.name == request.json["name"])
-    ).scalar()
-    data.busyness = request.json["busyness"]
+    building = db.session.execute(db.select(model.Building).filter_by(name=request.json["name"])).scalar()
+    building.busyness = int(request.json["busyness"])
     db.session.commit()
-    # print(data.name)
-    return str(request.json["busyness"])
+    return building.name
 
 
 # Update/PUT
 # NEEDS FIXING (?)
+# (do we need this? or is patch sufficient?)
 @app.put("/put")
 def put():
     user = model.Building(
@@ -80,7 +74,6 @@ def put():
         #busyness=int(request.json["busyness"]),
         name="Andrew",
         busyness=3,
-        last_updated=now    # --> I can't seem to add add user to the database without setting this....
     )
     db.session.add(user)
     print(user.id)
@@ -95,7 +88,12 @@ def put():
 
 
 # Delete/DELETE
-# TO BE IMPLEMENTED (?)
+# Needs review
+@app.delete("/delete")
+def delete():
+    building = db.session.execute(db.select(model.Building).filter_by(name=request.json["name"])).scalar()
+    db.session.delete(building)
+    db.session.commit()
 
 
 # Needed for page to load ?!
