@@ -19,7 +19,8 @@ CORS(app) # not needed for prod
 
 
 # Create/POST
-@app.post("/foo")
+# NEEDS FIXING (?)
+@app.post("/post")
 def post():
     user = model.Building(
         #name=str(request.json["name"]),
@@ -44,7 +45,7 @@ def post():
 
 
 # Read/GET
-@app.get("/bar")
+@app.get("/get")
 def get():
     data = db.session.execute(db.select(model.Building))
     for d in data:
@@ -55,18 +56,55 @@ def get():
 
 
 # Update/PATCH
-@app.patch("/update")   # --> Need new button for testing ? Current button onClick is for post
+# NEEDS FIXING (?)
+@app.patch("/patch")
 def patch():
     data = db.session.execute(
         db.select(model.Building).where(model.Building.name == request.json["name"])
     ).scalar()
     data.busyness = request.json["busyness"]
     db.session.commit()
+    # print(data.name)
+    return str(request.json["busyness"])
+
+
+# Update/PUT
+# NEEDS FIXING (?)
+@app.put("/put")
+def put():
+    user = model.Building(
+        #name=str(request.json["name"]),
+        #address=str(request.json["address"]),
+        #location=str(request.json["location"]),
+        #capacity=str(request.json["capacity"]),
+        #busyness=int(request.json["busyness"]),
+        name="Andrew",
+        busyness=3,
+        last_updated=now    # --> I can't seem to add add user to the database without setting this....
+    )
+    db.session.add(user)
+    print(user.id)
+    db.session.commit()
+    print(user.id)
+    input = model.Input(
+        busyness= int(request.json["busyness"])
+    )
+    db.session.add(input)
+    db.session.commit()
     return str(request.json["busyness"])
 
 
 # Delete/DELETE
 # TO BE IMPLEMENTED (?)
+
+
+# Needed for page to load ?!
+@app.get("/building")
+def building():
+    data = db.session.execute(
+        db.select(model.Building).where(model.Building.name == request.args.get("name"))
+    ).scalar()
+    return str(data.busyness)
 
 
 '''
