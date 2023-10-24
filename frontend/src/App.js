@@ -6,8 +6,9 @@ function App() {
     return (
         <div className="App">
             <header className="App-header">
-                <p>This is a demo for how the frontend and backend can interact!</p>
+                <p>CIF</p>
                 <div className="row">
+                    <Button text={"Update building busyness"}/>
                     <Button text={"Update building busyness"}/>
                 </div>
             </header>

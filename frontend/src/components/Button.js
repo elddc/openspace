@@ -3,7 +3,7 @@ import "./button.css";
 import axios from "axios";
 
 const Button = ({text}) => {
-    const [busyness, setBusyness] = useState(1);
+    const [busyness, setBusyness] = useState(false);
     const [inProgress, setInProgress] = useState(true)
 
     // initial get request
@@ -12,14 +12,15 @@ const Button = ({text}) => {
         axios.get("http://127.0.0.1:5000/building", {
             params: { "name": "CIF" }
         }).then(res => {
+            console.log(res)
             setBusyness(res.data);
             setInProgress(false);
-        })
+        }).catch(err => console.log(err));
     }, []);
 
     // update db every time busyness changes
     useEffect(() => {
-        if (!inProgress) {
+        if (busyness) {
             axios.post("http://127.0.0.1:5000/update", {
                 name: "CIF",
                 busyness
@@ -27,7 +28,10 @@ const Button = ({text}) => {
                 console.log(res);
             }).catch(err => console.log(err));
         }
-    }, [busyness, inProgress]);
+        else {
+            console.log("GET request in progress, please wait for the page to finish loading");
+        }
+    }, [busyness]);
 
     // increment busyness
     const updateBusyness = () => {
