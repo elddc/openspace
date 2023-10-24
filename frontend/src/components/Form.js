@@ -37,8 +37,12 @@ const Form = ({text}) => {
     return <div>
         <p>{building}: {busyness * 20}% full</p>
         <div className="row">
-            <Button text={"Increase busyness"} callback={() => setBusyness(Math.min(busyness + 1, 5))}/>
-            <Button text={"Decrease busyness"} callback={() => setBusyness(Math.max(busyness - 1, 0))}/>
+            <Button callback={() => setBusyness(Math.min(busyness + 1, 5))}>
+                Increase busyness
+            </Button>
+            <Button callback={() => setBusyness(Math.max(busyness - 1, 0))}>
+                Decrease busyness
+            </Button>
         </div>
     </div>
 }

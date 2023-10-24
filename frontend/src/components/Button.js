@@ -2,8 +2,8 @@ import {useState, useEffect} from "react";
 import "./button.css";
 import axios from "axios";
 
-const Button = ({text, callback}) => {
-    return <div className="button" onClick={callback}>{text}</div>
+const Button = ({callback, children}) => {
+    return <div className="button" onClick={callback}>{children}</div>
 }
 
 export default Button;
