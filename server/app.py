@@ -18,8 +18,9 @@ CORS(app) # not needed for prod
 
 # Create/POST
 # Needs review
-@app.post("/post")
+@app.post("/building")
 def post():
+    # print(request.json)
     # Create a building and add it to the database
     # Database will automatically generate and add uuid for building (generated based on name?)
     building = model.Building(
@@ -45,7 +46,7 @@ def post():
     
     db.session.commit()
    
-    return building.busyness
+    return str(building.busyness)
 
 
 # Read/GET
@@ -61,10 +62,11 @@ def get():
 
 # Update/PATCH
 # Needs review
-@app.patch("/patch")
+@app.put("/building")
 def patch():
     building = db.session.execute(db.select(model.Building).filter_by(name=request.json["name"])).scalar()
     building.busyness = int(request.json["busyness"])
+    db.session.add(building)
     db.session.commit()
     
     input = model.Input(
@@ -77,31 +79,6 @@ def patch():
 
     return building.name
 
-
-# Update/PUT
-# NEEDS FIXING (?)
-# (do we need this? or is patch sufficient?)
-@app.put("/put")
-def put():
-    user = model.Building(
-        #name=str(request.json["name"]),
-        #address=str(request.json["address"]),
-        #location=str(request.json["location"]),
-        #capacity=str(request.json["capacity"]),
-        #busyness=int(request.json["busyness"]),
-        name="Andrew",
-        busyness=3,
-    )
-    db.session.add(user)
-    print(user.id)
-    db.session.commit()
-    print(user.id)
-    input = model.Input(
-        busyness= int(request.json["busyness"])
-    )
-    db.session.add(input)
-    db.session.commit()
-    return str(request.json["busyness"])
 
 
 # Delete/DELETE
