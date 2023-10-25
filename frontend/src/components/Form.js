@@ -41,8 +41,8 @@ const Form = ({text}) => {
         <Slider value={busyness} setValue={setBusyness}/>
         <br />
         <div className="row">
-            <Button text={"Decrease busyness"} callback={() => setBusyness(Math.max(busyness - 1, 0))}/>
-            <Button text={"Increase busyness"} callback={() => setBusyness(Math.min(busyness + 1, 5))}/>
+            <Button callback={() => setBusyness(Math.max(busyness - 1, 0))}>Decrease busyness</Button>
+            <Button callback={() => setBusyness(Math.min(busyness + 1, 5))}>Increase busyness</Button>
         </div>
     </div>
 }
