@@ -45,8 +45,10 @@ def post():
     db.session.add(input)
     
     db.session.commit()
-   
-    return str(building.busyness)
+    
+    toRet = building.busyness
+    db.session.close()
+    return str(toRet)
 
 
 # Read/GET
@@ -57,6 +59,7 @@ def get():
         print(d)
 
     # get requests can access data with request.args.get(key)
+    db.session.close()
     return str(request.args.get("building"))
 
 
@@ -77,7 +80,9 @@ def patch():
     
     db.session.commit()
 
-    return building.name
+    toRet = building.name
+    db.session.close()
+    return str(toRet)
 
 
 
