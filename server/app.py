@@ -6,7 +6,6 @@ import os
 from dotenv import load_dotenv
 import schema as model
 
-
 load_dotenv()
 db = SQLAlchemy(model_class=model.Base)
 app = Flask(__name__)
@@ -24,19 +23,28 @@ def post():
     # Create a building and add it to the database
     # Database will automatically generate and add uuid for building (generated based on name?)
     building = model.Building(
-        #name=str(request.json["name"]),
-        #address=str(request.json["address"]),
-        #location=str(request.json["location"]),
-        #capacity=str(request.json["capacity"]),
-        #busyness=int(request.json["busyness"]),
-        name="test",
-        busyness=3,
+        name=str(request.json["name"]),
+        address=str(request.json["address"]),
+        location=str(request.json["location"]),
+        capacity=str(request.json["capacity"]),
+        busyness=int(request.json["busyness"]),
+        # name="test",
+        # busyness=3,
     )
     db.session.add(building)
     db.session.commit()
     # Set the busyness of the building and add to appropriate row of database
-    building.busyness = int(request.json["busyness"])
+    # building.busyness = int(request.json["busyness"])
+    # db.session.commit()
+    
+    input = model.Input(
+        building_id=building.id,
+        busyness=building.busyness
+    )
+    db.session.add(input)
+    
     db.session.commit()
+   
     return building.busyness
 
 
@@ -58,6 +66,15 @@ def patch():
     building = db.session.execute(db.select(model.Building).filter_by(name=request.json["name"])).scalar()
     building.busyness = int(request.json["busyness"])
     db.session.commit()
+    
+    input = model.Input(
+        building_id=building.id,
+        busyness=building.busyness
+    )
+    db.session.add(input)
+    
+    db.session.commit()
+
     return building.name
 
 
