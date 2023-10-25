@@ -28,11 +28,38 @@ def update():
 
 
 @app.get("/building")
-def building():
+def handleBuildingGet():
+    # print(request.args.get("name"))
+    if (request.args.get("name")): return getBuildingByName()
+    else: return getAllBuildings()
+
+def getBuildingByName(): 
     data = db.session.execute(
         db.select(model.Building).where(model.Building.name == request.args.get("name"))
     ).scalar()
     return str(data.busyness)
+def getAllBuildings():
+    data = db.session.execute(db.select(model.Building))
+    # instantiate empty list of all buildings that will be populated with dictionaries of each building
+    buildings = list()
+    for d in data:
+        # turn d into schema.Building object
+        b = d._mapping["Building"]
+        # turn b into a dictionary
+        building = dict(
+            id=b.id,
+            name=b.name,
+            address=b.address,
+            location=b.location,
+            capacity=b.capacity,
+            busyness=b.busyness,
+            last_updated=b.last_updated,
+        )
+        # add building to buildings
+        buildings.append(building)
+    # non-JSON
+    return buildings
+
 
 
 @app.post("/foo")
@@ -60,30 +87,6 @@ def foo():
     return str(request.json["busyness"])
 
 
-@app.get("/bar")
-def bar():
-    data = db.session.execute(db.select(model.Building))
-    # instantiate empty list of all buildings that will be populated with dictionaries of each building
-    buildings = list()
-    for d in data:
-        # turn d into schema.Building object
-        b = d._mapping["Building"]
-        # turn b into a dictionary
-        building = dict(
-            id=b.id,
-            name=b.name,
-            address=b.address,
-            location=b.location,
-            capacity=b.capacity,
-            busyness=b.busyness,
-            last_updated=b.last_updated,
-        )
-        # add building to buildings
-        buildings.append(building)
-
-    # non-JSON
-    return buildings
-
     # JSON, UUID not JSON serializable
     # return json.dumps(buildings, indent = 4)
 
@@ -92,11 +95,34 @@ def bar():
 
 
 @app.get("/room")
-def room():
+def handleRoomGet():
+    if (request.args.get("name")): return getRoomByName()
+    return getAllRooms()
+
+def getRoomByName():
     data = db.session.execute(
         db.select(model.Room).where(model.Room.name == request.args.get("name"))
     ).scalar()
     return str(data.busyness)
+def getAllRooms():
+    data = db.session.execute(db.select(model.Room))
+    # instantiate empty list of all buildings that will be populated with dictionaries of each building
+    rooms = list()
+    for d in data:
+        # turn d into schema.Building object
+        b = d._mapping["Room"]
+        # turn b into a dictionary
+        room = dict(
+            id=b.id,
+            name=b.name,
+            busyness=b.busyness,
+            last_updated=b.last_updated,
+        )
+        # add building to buildings
+        rooms.append(room)
+
+    # non-JSON
+    return rooms
 
 
 @app.post("/room_foo")
@@ -121,26 +147,6 @@ def room_foo():
     return str(request.json["busyness"])
 
 
-@app.get("/room_bar")
-def room_bar():
-    data = db.session.execute(db.select(model.Room))
-    # instantiate empty list of all buildings that will be populated with dictionaries of each building
-    rooms = list()
-    for d in data:
-        # turn d into schema.Building object
-        b = d._mapping["Room"]
-        # turn b into a dictionary
-        room = dict(
-            id=b.id,
-            name=b.name,
-            busyness=b.busyness,
-            last_updated=b.last_updated,
-        )
-        # add building to buildings
-        rooms.append(room)
-
-    # non-JSON
-    return rooms
 
     # JSON, UUID not JSON serializable
     # return json.dumps(buildings, indent = 4)
