@@ -1,6 +1,11 @@
 .button {
-    background-color: #309d19;
-    padding: 2px 5px;
-    border: 2px solid white;
+    background-color: #df4825;
+    opacity: .8;
+    padding: 8px 15px;
+    border: none;
+    border-radius: 5px;
     margin: 20px;
+}
+.button:hover, .button:focus {
+    opacity: 1;
 }
