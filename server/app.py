@@ -1,6 +1,7 @@
 from flask import Flask, request
-from flask_cors import CORS # not needed for prod
+from flask_cors import CORS  # not needed for prod
 from flask_sqlalchemy import SQLAlchemy
+
 # from sqlalchemy.orm import DeclarativeBase
 import os
 from dotenv import load_dotenv
@@ -13,7 +14,8 @@ app = Flask(__name__)
 app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv("DB_URI")
 db.init_app(app)
 
-CORS(app) # not needed for prod
+CORS(app)  # not needed for prod
+
 
 @app.post("/update")
 def update():
@@ -32,6 +34,7 @@ def building():
     ).scalar()
     return str(data.busyness)
 
+
 @app.post("/foo")
 def foo():
     # db.session.add(model.Input(
@@ -41,7 +44,6 @@ def foo():
     # print(db.session.new)
     # db.session.commit()
 
-
     # with Session(engine) as session:
     user = model.Building(
         # id="",
@@ -50,13 +52,13 @@ def foo():
         location=str(request.json["location"]),
         capacity=str(request.json["capacity"]),
         busyness=int(request.json["busyness"]),
-
         # last_updated="",
     )
     db.session.add(user)
 
     db.session.flush()
     return str(request.json["busyness"])
+
 
 @app.get("/bar")
 def bar():
@@ -65,15 +67,81 @@ def bar():
     buildings = list()
     for d in data:
         # turn d into schema.Building object
-        b = d._mapping['Building']
+        b = d._mapping["Building"]
         # turn b into a dictionary
-        building = dict(id=b.id, name=b.name, address=b.address, location=b.location, capacity=b.capacity, busyness=b.busyness, last_updated=b.last_updated)
+        building = dict(
+            id=b.id,
+            name=b.name,
+            address=b.address,
+            location=b.location,
+            capacity=b.capacity,
+            busyness=b.busyness,
+            last_updated=b.last_updated,
+        )
         # add building to buildings
         buildings.append(building)
-    
+
     # non-JSON
     return buildings
-    
+
+    # JSON, UUID not JSON serializable
+    # return json.dumps(buildings, indent = 4)
+
+    # get requests can access data with request.args.get(key)
+    # return str(request.args.get("building"))
+
+
+@app.get("/room")
+def room():
+    data = db.session.execute(
+        db.select(model.Room).where(model.Room.name == request.args.get("name"))
+    ).scalar()
+    return str(data.busyness)
+
+
+@app.post("/room_foo")
+def room_foo():
+    # db.session.add(model.Input(
+    #     name = "CIF",
+    #     busyness = request.json["busyness"],
+    # ))
+    # print(db.session.new)
+    # db.session.commit()
+
+    # with Session(engine) as session:
+    user = model.Room(
+        # id="",
+        name=str(request.json["name"]),
+        busyness=int(request.json["busyness"]),
+        # last_updated="",
+    )
+    db.session.add(user)
+
+    db.session.flush()
+    return str(request.json["busyness"])
+
+
+@app.get("/room_bar")
+def room_bar():
+    data = db.session.execute(db.select(model.Room))
+    # instantiate empty list of all buildings that will be populated with dictionaries of each building
+    rooms = list()
+    for d in data:
+        # turn d into schema.Building object
+        b = d._mapping["Room"]
+        # turn b into a dictionary
+        room = dict(
+            id=b.id,
+            name=b.name,
+            busyness=b.busyness,
+            last_updated=b.last_updated,
+        )
+        # add building to buildings
+        rooms.append(room)
+
+    # non-JSON
+    return rooms
+
     # JSON, UUID not JSON serializable
     # return json.dumps(buildings, indent = 4)
 
