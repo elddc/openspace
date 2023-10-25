@@ -5,6 +5,7 @@ from flask_sqlalchemy import SQLAlchemy
 import os
 from dotenv import load_dotenv
 import schema as model
+import json
 
 load_dotenv()
 db = SQLAlchemy(model_class=model.Base)
@@ -60,8 +61,21 @@ def foo():
 @app.get("/bar")
 def bar():
     data = db.session.execute(db.select(model.Building))
+    # instantiate empty list of all buildings that will be populated with dictionaries of each building
+    buildings = list()
     for d in data:
-        print(d)
+        # turn d into schema.Building object
+        b = d._mapping['Building']
+        # turn b into a dictionary
+        building = dict(id=b.id, name=b.name, address=b.address, location=b.location, capacity=b.capacity, busyness=b.busyness, last_updated=b.last_updated)
+        # add building to buildings
+        buildings.append(building)
+    
+    # non-JSON
+    return buildings
+    
+    # JSON, UUID not JSON serializable
+    # return json.dumps(buildings, indent = 4)
 
     # get requests can access data with request.args.get(key)
-    return str(request.args.get("building"))
+    # return str(request.args.get("building"))
