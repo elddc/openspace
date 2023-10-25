@@ -1,6 +1,5 @@
 import {useState, useEffect} from "react";
 import "./button.css";
-import axios from "axios";
 
 const Button = ({text}) => {
     const [busyness, setBusyness] = useState(1);
