@@ -36,15 +36,13 @@ const Form = ({text}) => {
     }, [busyness]);
 
     return <div>
-        <p>{building}: {busyness * 20}% full</p>
+        <h1>{building}</h1>
+        <h3>{busyness * 20}% full</h3>
         <Slider value={busyness} setValue={setBusyness}/>
+        <br />
         <div className="row">
-            <Button callback={() => setBusyness(Math.min(busyness + 1, 5))}>
-                Increase busyness
-            </Button>
-            <Button callback={() => setBusyness(Math.max(busyness - 1, 0))}>
-                Decrease busyness
-            </Button>
+            <Button callback={() => setBusyness(Math.max(busyness - 1, 0))}>Decrease busyness</Button>
+            <Button callback={() => setBusyness(Math.min(busyness + 1, 5))}>Increase busyness</Button>
         </div>
     </div>
 }
