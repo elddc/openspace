@@ -23,7 +23,7 @@ const Form = ({text}) => {
     // update db every time busyness changes
     useEffect(() => {
         if (busyness) {
-            axios.post("http://127.0.0.1:5000/update", {
+            axios.post("http://127.0.0.1:5000/building", {
                 name: building,
                 busyness
             }).then(res => {
