@@ -87,12 +87,12 @@ def patch():
 
 
 # Delete/DELETE
-# Needs review
-@app.delete("/delete")
-def delete():
-    building = db.session.execute(db.select(model.Building).filter_by(name=request.json["name"])).scalar()
-    db.session.delete(building)
-    db.session.commit()
+# # Needs review
+# @app.delete("/delete")
+# def delete():
+#     building = db.session.execute(db.select(model.Building).filter_by(name=request.json["name"])).scalar()
+#     db.session.delete(building)
+#     db.session.commit()
 
 
 # Needed for page to load ?!
