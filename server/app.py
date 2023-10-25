@@ -1,7 +1,6 @@
 from flask import Flask, request
 from flask_cors import CORS # not needed for prod
 from flask_sqlalchemy import SQLAlchemy
-# from sqlalchemy.orm import DeclarativeBase
 import os
 from dotenv import load_dotenv
 import schema as model
