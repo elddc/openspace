@@ -1,6 +1,7 @@
 .row {
   display: flex;
   flex-direction: row;
+  align-items: center;
 }
 
 .App {
@@ -19,7 +20,7 @@
 }
 
 .App-header {
-  background-color: #282c34;
+  background-color: #122849;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
