@@ -53,5 +53,6 @@ for key in id:
 
         # quit driver
         driver.quit()
+        busyness[key] = round((ratio)/20)
 
 print(busyness)
