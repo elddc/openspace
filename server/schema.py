@@ -11,7 +11,7 @@ class Base(DeclarativeBase):
 
 class Building(Base):
     __tablename__="building"
-    id: Mapped[uuid.UUID] = mapped_column(primary_key=True, default=uuid.uuid4())
+    id: Mapped[uuid.UUID] = mapped_column(primary_key=True, default=uuid.uuid4)
     name: Mapped[str] = mapped_column(primary_key=True)
     address: Mapped[Optional[str]]
     location: Mapped[Optional[str]]
@@ -22,7 +22,7 @@ class Building(Base):
 
     inputs: Mapped[List["Input"]] = relationship(back_populates="building")
 
-    last_updated: Mapped[datetime.datetime]= mapped_column(default=datetime.datetime.now())
+    last_updated: Mapped[datetime.datetime] = mapped_column(default=datetime.datetime.now)
 
     def __repr__(self) -> str:
         return f"User(id={self.id!r}, address={self.address!r}, location={self.location!r}, capacity={self.capacity!r}, busyness={self.busyness!r}, last_updated={self.last_updated!r})"
@@ -40,13 +40,13 @@ class Room(Base):
 
 class Input(Base):
     __tablename__="input"
-    id: Mapped[uuid.UUID] = mapped_column(primary_key=True, default=uuid.uuid4())
+    id: Mapped[uuid.UUID] = mapped_column(primary_key=True, default=uuid.uuid4)
     building_id = mapped_column(ForeignKey("building.id"))
     busyness = mapped_column(SmallInteger)
 
     building: Mapped[Building] = relationship(back_populates="inputs")
 
-    time_created: Mapped[datetime.datetime] = mapped_column(default=datetime.datetime.now())
+    time_created: Mapped[datetime.datetime] = mapped_column(default=datetime.datetime.now)
     def __repr__(self) -> str:
         return f"Input(id={self.id!r}, busyness={self.busyness!r})"
 
