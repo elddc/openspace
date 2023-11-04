@@ -1,0 +1,39 @@
+/* global CSS styles */
+:root {
+    --text-color: #4b4b4b;
+    --bg-color: #f7f7f7;
+    --card-color: #eaebec;
+    --main-color: #f18354;
+    --secondary-color: #cbced0;
+}
+html, body, #root, main {
+    height: 100%;
+    width: 100%;
+}
+main {
+    display: flex;
+    flex-direction: row;
+    align-items: stretch;
+    justify-content: stretch;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+    font-size: 18px;
+    color: var(--text-color);
+    background: var(--bg-color);
+}
+
+.row {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+.center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+@media (max-width: 30rem) {
+    main {
+        flex-direction: column;
+    }
+}
