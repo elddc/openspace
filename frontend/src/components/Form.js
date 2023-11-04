@@ -37,7 +37,7 @@ const Form = ({text}) => {
 
     return <div>
         <h1>{building}</h1>
-        <h3>{busyness * 20}% full</h3>
+        <h3>{(busyness * 20) || '-'}% full</h3>
         <Slider value={busyness} setValue={setBusyness}/>
         <br />
         <div className="row">
