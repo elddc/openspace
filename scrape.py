@@ -8,6 +8,7 @@ base = "https://uiuc.libcal.com/"
 all = "allspaces" # base + all
 id  = { # base + "spaces/?lid=" + id of desired library
     "chemistry": 5903,
+    "funk": 3604,
     "grainger": 3606,
     "international": 5766,
     "main": 3608,
