@@ -36,8 +36,8 @@ for key in id:
     url = base + "spaces?lid=" + str(id[key]) + args
 
     # # open selenium instance
-    # options = Options()
-options.add_argument("--headless=new")
+    options = Options()
+    options.add_argument("--headless=new")
     driver = webdriver.Chrome(options=options)
 
     # # navigate to url
