@@ -2,7 +2,8 @@ import {useState, useEffect} from "react";
 import Slider from "./Slider";
 import Button from "./Button";
 import axios from "axios";
-import {CircularProgressbar} from "react-circular-progressbar";
+// import {CircularProgressbar} from "react-circular-progressbar";
+import { CircularProgressbarWithChildren } from 'react-circular-progressbar';
 import "react-circular-progressbar/dist/styles.css";
 import "./form.css";
 
@@ -18,6 +19,7 @@ const Form = ({text}) => {
         }).then(res => {
             console.log(res)
             setBusyness(res.data);
+            setProgress(res.data);
         }).catch(err => console.log(err));
     }, []);
 
@@ -30,6 +32,8 @@ const Form = ({text}) => {
                 busyness
             }).then(res => {
                 console.log(res);
+                
+                setProgress(res.data);
             }).catch(err => console.log(err));
         }
         else {
@@ -41,11 +45,14 @@ const Form = ({text}) => {
         <h1>{building}</h1>
         <h3>{busyness < 0 ? '-' : (busyness * 20)}% full</h3>
         <div className="box progress-container">
-            <CircularProgressbar
+            <CircularProgressbarWithChildren
                 value={progress * 20}
-                text={progress * 20 + "%"}
-                strokeWidth={20}
-            />
+                // text={progress * 20 + "%"}
+                strokeWidth={12}
+            >
+                <div className="progress-percent">{progress * 20}%</div>
+                FULL
+            </CircularProgressbarWithChildren>
         </div>
         <br />
         <div className="box">

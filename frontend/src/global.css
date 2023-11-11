@@ -5,6 +5,8 @@
     --card-color: #eaebec;
     --main-color: #f18354;
     --secondary-color: #cbced0;
+    --circleprogress-color: #FF1E1E;
+    --circleprogbg-color: #CBCED0;
 }
 html, body, #root, main {
     height: 100%;

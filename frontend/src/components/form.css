@@ -19,4 +19,17 @@
 .progress-container {
     width: 60%;
     aspect-ratio: 1;
+    color: black;
+    font-weight: bold;
+    
+}
+.progress-container .CircularProgressbar-path {
+    stroke: var(--circleprogress-color);
+}
+.progress-container .CircularProgressbar-trail {
+    stroke: var(--circleprogbg-color);
+}
+
+.progress-percent {
+    font-size: 2.2em;
 }
