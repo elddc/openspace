@@ -2,9 +2,10 @@ import {useState, useEffect} from "react";
 import Slider from "./Slider";
 import Button from "./Button";
 import axios from "axios";
+import "./form.css";
 
 const Form = ({text}) => {
-    const [busyness, setBusyness] = useState(false);
+    const [busyness, setBusyness] = useState(-1);
     const [inProgress, setInProgress] = useState(true);
     const [building, setBuilding] = useState("CIF");
 
@@ -22,7 +23,8 @@ const Form = ({text}) => {
 
     // update db every time busyness changes
     useEffect(() => {
-        if (busyness) {
+        console.log(busyness)
+        if (busyness >= 0) {
             axios.post("http://127.0.0.1:5000/building", {
                 name: building,
                 busyness
@@ -35,12 +37,12 @@ const Form = ({text}) => {
         }
     }, [busyness]);
 
-    return <div>
+    return <div className="form center">
         <h1>{building}</h1>
-        <h3>{(busyness * 20) || '-'}% full</h3>
+        <h3>{busyness < 0 ? '-' : (busyness * 20)}% full</h3>
         <Slider value={busyness} setValue={setBusyness}/>
         <br />
-        <div className="row">
+        <div className="card">
             <Button callback={() => setBusyness(Math.max(busyness - 1, 0))}>Decrease busyness</Button>
             <Button callback={() => setBusyness(Math.min(busyness + 1, 5))}>Increase busyness</Button>
         </div>
