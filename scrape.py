@@ -2,6 +2,7 @@
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from webdriver_manager.chrome import ChromeDriverManager
+from datetime import datetime, timedelta
 
 # config, used for both scraping methods
 base = "https://uiuc.libcal.com/"
@@ -28,6 +29,9 @@ busyness = {
 }
 
 for key in id:
+    print("_______________________")
+    print("Library: " + key)
+
     # url to scrape
     url = base + "spaces?lid=" + str(id[key]) + args
 
@@ -38,21 +42,35 @@ for key in id:
     # # navigate to url
     driver.get(url)
 
+    rounded = datetime.now() - (datetime.now() - datetime.min) % timedelta(minutes=30)
+    meridian = ("am", "pm")[bool(int((datetime.now()).strftime('%H')) > 11)]
+    current_time = (rounded.strftime('%Y/%m/%d %I:%M:%S'))[11:16] + meridian
+
     # # extract data
-    events = [ev.get_attribute("title") for ev in driver.find_elements(By.CLASS_NAME, "fc-event-today")]
+    events = [ev.get_attribute("title") for ev in driver.find_elements(By.CLASS_NAME, "fc-event-today") 
+            if current_time in ("0" + ev.get_attribute("title"))]
+
     if len(events) == 0:
         busyness[key] = 0
     else:
         total_unavailable = 0
 
         for ev in events:
+            print(ev)
             if "Unavailable" in ev:
                 total_unavailable = total_unavailable + 1
 
-        ratio = float(total_unavailable)/len(events) * 100
+        if total_unavailable == 0:
+            busyness[key] = 1
+        else:
+            print("Total: " + str(len(events)))
+            print("Unavailable: " + str(total_unavailable))
+            ratio = float(total_unavailable)/len(events) * 100
 
-        # quit driver
-        driver.quit()
-        busyness[key] = round((ratio)/20)
+            # quit driver
+            driver.quit()
+            busyness[key] = round((ratio)/20)
+        
+        print("Busyness: " + str(busyness[key]))
 
 print(busyness)
