@@ -2,22 +2,22 @@ import {useState, useEffect} from "react";
 import Slider from "./Slider";
 import Button from "./Button";
 import axios from "axios";
+import {CircularProgressbar} from "react-circular-progressbar";
+import "react-circular-progressbar/dist/styles.css";
 import "./form.css";
 
 const Form = ({text}) => {
     const [busyness, setBusyness] = useState(-1);
-    const [inProgress, setInProgress] = useState(true);
+    const [progress, setProgress] = useState(4);
     const [building, setBuilding] = useState("CIF");
 
     // initial get request
     useEffect(() => {
-        setInProgress(true);
         axios.get("http://127.0.0.1:5000/building", {
             params: { "name": building }
         }).then(res => {
             console.log(res)
             setBusyness(res.data);
-            setInProgress(false);
         }).catch(err => console.log(err));
     }, []);
 
@@ -40,7 +40,13 @@ const Form = ({text}) => {
     return <div className="form center">
         <h1>{building}</h1>
         <h3>{busyness < 0 ? '-' : (busyness * 20)}% full</h3>
-        
+        <div className="box progress-container">
+            <CircularProgressbar
+                value={progress * 20}
+                text={progress * 20 + "%"}
+                strokeWidth={20}
+            />
+        </div>
         <br />
         <div className="box">
             <Slider value={busyness} setValue={setBusyness}/>
