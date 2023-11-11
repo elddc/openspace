@@ -19,7 +19,7 @@ CORS(app)  # not needed for prod
 # https://docs.sqlalchemy.org/en/20/tutorial/orm_data_manipulation.html
 
 # Create/POST
-@app.post("/building")
+@app.post("/new/building")
 def post():
     # print(request.json)
     # Create a building and add it to the database
@@ -38,39 +38,39 @@ def post():
     # Set the busyness of the building and add to appropriate row of database
     # building.busyness = int(request.json["busyness"])
     # db.session.commit()
-    
+
     input = model.Input(
         building_id=building.id,
         busyness=building.busyness
     )
     db.session.add(input)
-    
+
     db.session.commit()
-    
+
     toRet = building.busyness
     db.session.close()
     return str(toRet)
 
-@app.put("/building")
+@app.post("/building")
 def patch():
     building = db.session.execute(db.select(model.Building).filter_by(name=request.json["name"])).scalar()
     building.busyness = int(request.json["busyness"])
     db.session.add(building)
     db.session.commit()
-    
+
     input = model.Input(
         building_id=building.id,
         busyness=building.busyness
     )
     db.session.add(input)
-    
+
     db.session.commit()
 
     toRet = building.name
     db.session.close()
     return str(toRet)
 
-    
+
 @app.get("/building")
 def getBuilding():
     if request.args.get("name"):
@@ -141,7 +141,7 @@ def getAllRooms():
     # non-JSON
     return rooms
 
-# Doesn't work 
+# Doesn't work
 # @app.post("/room")
 # def updateRoom():
 #     # db.session.add(model.Input(

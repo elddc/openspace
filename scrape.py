@@ -1,7 +1,7 @@
 # imports
 from selenium import webdriver
 from selenium.webdriver.common.by import By
-from webdriver_manager.chrome import ChromeDriverManager
+from selenium.webdriver.chrome.options import Options
 from datetime import datetime, timedelta
 
 # config, used for both scraping methods
@@ -36,8 +36,9 @@ for key in id:
     url = base + "spaces?lid=" + str(id[key]) + args
 
     # # open selenium instance
-    # # note that headless running is currently broken in 4.13 - https://stackoverflow.com/questions/77191221
-    driver = webdriver.Chrome()
+    # options = Options()
+options.add_argument("--headless=new")
+    driver = webdriver.Chrome(options=options)
 
     # # navigate to url
     driver.get(url)
