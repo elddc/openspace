@@ -1,7 +1,7 @@
 # imports
 from selenium import webdriver
 from selenium.webdriver.common.by import By
-from webdriver_manager.chrome import ChromeDriverManager
+from selenium.webdriver.chrome.options import Options
 
 # config, used for both scraping methods
 base = "https://uiuc.libcal.com/"
@@ -17,12 +17,13 @@ id  = { # base + "spaces/?lid=" + id of desired library
 args = "&gid=0&c=0" # additional arguments
 
 # url to scrape
-url = base + "spaces?lid=" + str(id["grainger"]) + args
+url = base + "spaces?lid=" + str(id["chemistry"]) + args
 print(url)
 
 # open selenium instance
-# note that headless running is currently broken in 4.13 - https://stackoverflow.com/questions/77191221
-driver = webdriver.Chrome()
+options = Options()
+options.add_argument("--headless=new")
+driver = webdriver.Chrome(options=options)
 
 # navigate to url
 driver.get(url)
