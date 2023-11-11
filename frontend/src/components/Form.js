@@ -40,12 +40,14 @@ const Form = ({text}) => {
     return <div className="form center">
         <h1>{building}</h1>
         <h3>{busyness < 0 ? '-' : (busyness * 20)}% full</h3>
-        <Slider value={busyness} setValue={setBusyness}/>
+        
         <br />
-        {/*<div className="row">*/}
+        <div className="box">
+            <Slider value={busyness} setValue={setBusyness}/>
+            <br />
             <Button callback={() => setBusyness(Math.max(busyness - 1, 0))}>Decrease busyness</Button>
             <Button callback={() => setBusyness(Math.min(busyness + 1, 5))}>Increase busyness</Button>
-        {/*</div>*/}
+        </div>
     </div>
 }
 
