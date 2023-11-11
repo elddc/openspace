@@ -28,17 +28,17 @@ busyness = {
     "studio": 0
 }
 
+# open selenium instance
+options = Options()
+options.add_argument("--headless=new")
+driver = webdriver.Chrome(options=options)
+
 for key in id:
     print("_______________________")
     print("Library: " + key)
 
     # url to scrape
     url = base + "spaces?lid=" + str(id[key]) + args
-
-    # # open selenium instance
-    options = Options()
-    options.add_argument("--headless=new")
-    driver = webdriver.Chrome(options=options)
 
     # # navigate to url
     driver.get(url)
@@ -48,7 +48,7 @@ for key in id:
     current_time = (rounded.strftime('%Y/%m/%d %I:%M:%S'))[11:16] + meridian
 
     # # extract data
-    events = [ev.get_attribute("title") for ev in driver.find_elements(By.CLASS_NAME, "fc-event-today") 
+    events = [ev.get_attribute("title") for ev in driver.find_elements(By.CLASS_NAME, "fc-event-today")
             if current_time in ("0" + ev.get_attribute("title"))]
 
     if len(events) == 0:
@@ -68,10 +68,11 @@ for key in id:
             print("Unavailable: " + str(total_unavailable))
             ratio = float(total_unavailable)/len(events) * 100
 
-            # quit driver
-            driver.quit()
             busyness[key] = round((ratio)/20)
-        
+
         print("Busyness: " + str(busyness[key]))
+
+# quit driver
+driver.quit()
 
 print(busyness)
