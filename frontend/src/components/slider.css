@@ -9,6 +9,7 @@
     outline: none;
     -webkit-transition: .2s;
     transition: opacity .2s;
+    margin: .4rem 0;
 }
 .slider:disabled::-webkit-slider-thumb {
     display: none;
