@@ -1,80 +1,36 @@
-"""
-============ IMPORTANT ROOMS ============
-Ice Arena Ice Rink
-ARC Upper Level
-CRCE Main Gym 
-ARC Lower Level
-Ice Arena Stick and Puck
-CRCE Indoor Pool
-ARC Strength and Conditioning
-ARC Indoor Pool
-CRCE Raquetball Courts
-CRCE MP 1
-ARC Outdoor Pool
-CRCE MP 2
-CRCE Squash Court
-ARC Combat Room
-CRCE MAC Gym
-ARC Gym 1 
-CRCE Upper Level 
-ARC Gym 2 
-ARC Gym 3 
-ARC Rock Wall
-ARC Raquetball Courts
-ARC Squash Courts
-ARC MP Room 1
-ARC MP Room 2
-ARC MP Room 3
-ARC MP Room  4 
-ARC MP Room 5
-ARC MP Room 6 
-ARC MP Room 7
-Outdoor Center Play Fields ODC  North Turf Fields 
-Outdoor Center Play Fields ODC South Turf Fields 
-Outdoor Center Play Fields ODC North Basketball Courts 
-Outdoor Center Play Fields ODC South Basketball Courts
-Outdoor Center Play Fields ODC Sand Volleyball Courts
-Outdoor Center Play Fields ODC Tennis Courts 
-Complex Fields Complex Softball Fields 
-Complex Fields Complex Grass Fields
-
-============ OTHER ROOMS ============
-ARC Entrance Level Fitness Area 
-CRCE Lobby Area
-Ice Arena Ice Arena Lobby
-CRCE Hot Tub
-ARC Sauna
-
-============ FACILITIES ============
-ARC
-CRCE
-Ice Arena
-Outdoor Center
-Complex Fields
-"""
-
-%pip install requests
-
 import requests
 import json
 
 url = 'https://goboardapi.azurewebsites.net/api/FacilityCount/GetCountsByAccount?AccountAPIKey=38902ca4-0d3b-409e-903e-615e5e530612'
 
+# produces a list of entry(s) (which have different tags)
 entry_list = requests.get(url).json()
-
-std::vector<std::string> buildings{"ARC, CRCE, Ice Arena, Outdoor Center, Complex Fields"};
-std::vector<std::pair<int, int>> size_
-
-std::map<std::string, std::pair<int, int>> buildings;
-for (std::string building : buildings) {
-    int size = 0;
-    int capacity = 0;
-
-    for entry in entry_list:
-        size += entry[LastCount];
-        capacity += entry[TotalCapacity];
-}
 
 
 for entry in entry_list:
-    print(entry['FacilityName'], entry['LocationName'])
+    print(entry['FacilityName'], entry['LocationName'], entry['MaxCapacityRange'])
+
+CRCE_CAP = 0
+ARC_CAP = 0
+ICEARENA_CAP = 0
+OUTDOORCENTER_CAP = 0
+COMPLEXFIELDS_CAP = 0
+
+for entry in entry_list:
+    if entry['FacilityName']=="CRCE":
+        CRCE_CAP = CRCE_CAP + int(entry['MaxCapacityRange'])
+    elif entry['FacilityName']=="ARC":
+        ARC_CAP = ARC_CAP + int(entry['MaxCapacityRange'])
+    elif entry['FacilityName']=="Ice Arena":
+        ICEARENA_CAP = ICEARENA_CAP + int(entry['MaxCapacityRange'])
+    elif entry['FacilityName']=="Outdoor Center Play Fields":
+        OUTDOORCENTER_CAP = OUTDOORCENTER_CAP + int(entry['MaxCapacityRange'])
+    elif entry['FacilityName']=="Complex Fields":
+        COMPLEXFIELDS_CAP = COMPLEXFIELDS_CAP + int(entry['MaxCapacityRange'])
+
+
+r = requests.post('http://127.0.0.1:5000/new/building', data={'name':"ARC", 'capacity':ARC_CAP})
+r = requests.post('http://127.0.0.1:5000/new/building', data={'name':"CRCE", 'capacity':CRCE_CAP})
+r = requests.post('http://127.0.0.1:5000/new/building', data={'name':"Ice Arena", 'capacity':ICEARENA_CAP})
+r = requests.post('http://127.0.0.1:5000/new/building', data={'name':"Outdoor Center Play Fields", 'capacity':OUTDOORCENTER_CAP})
+r = requests.post('http://127.0.0.1:5000/new/building', data={'name':"Complex Fields", 'capacity':COMPLEXFIELDS_CAP})
