@@ -29,8 +29,8 @@ for entry in entry_list:
         COMPLEXFIELDS_CAP = COMPLEXFIELDS_CAP + int(entry['MaxCapacityRange'])
 
 
-r = requests.post('http://127.0.0.1:5000/new/building', data={'name':"ARC", 'capacity':ARC_CAP})
-r = requests.post('http://127.0.0.1:5000/new/building', data={'name':"CRCE", 'capacity':CRCE_CAP})
-r = requests.post('http://127.0.0.1:5000/new/building', data={'name':"Ice Arena", 'capacity':ICEARENA_CAP})
-r = requests.post('http://127.0.0.1:5000/new/building', data={'name':"Outdoor Center Play Fields", 'capacity':OUTDOORCENTER_CAP})
-r = requests.post('http://127.0.0.1:5000/new/building', data={'name':"Complex Fields", 'capacity':COMPLEXFIELDS_CAP})
+r = requests.post('http://localhost:5000/new/building', json={'name':"ARC", 'address':'201 E Peabody Dr, Champaign, IL 61820', 'busyness': 0, 'capacity':ARC_CAP})
+r = requests.post('http://localhost:5000/new/building', json={'name':"CRCE", 'address':'1102 W Gregory Dr, Urbana, IL 61801', 'busyness': 0, 'capacity':CRCE_CAP})
+r = requests.post('http://localhost:5000/new/building', json={'name':"Ice Arena", 'address':'406 E Armory Ave, Champaign, IL 61820', 'busyness': 0, 'capacity':ICEARENA_CAP})
+r = requests.post('http://localhost:5000/new/building', json={'name':"Outdoor Center Play Fields", 'address':'1201 S Dorner Dr, Urbana, IL 61801', 'busyness': 0, 'capacity':OUTDOORCENTER_CAP})
+r = requests.post('http://localhost:5000/new/building', json={'name':"Complex Fields", 'address':'1201 W Florida Ave, Urbana, IL 61801', 'busyness': 0, 'capacity':COMPLEXFIELDS_CAP})
