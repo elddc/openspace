@@ -32,7 +32,7 @@ const Form = ({text}) => {
                 busyness
             }).then(res => {
                 console.log(res);
-                
+
                 setProgress(res.data);
             }).catch(err => console.log(err));
         }
@@ -42,17 +42,18 @@ const Form = ({text}) => {
     }, [busyness]);
 
     return <div className="form center">
-        <h1>{building}</h1>
-        <h3>{busyness < 0 ? '-' : (busyness * 20)}% full</h3>
-        <div className="box progress-container">
-            <CircularProgressbarWithChildren
-                value={progress * 20}
-                // text={progress * 20 + "%"}
-                strokeWidth={12}
-            >
-                <div className="progress-percent">{progress * 20}%</div>
-                FULL
-            </CircularProgressbarWithChildren>
+        <div className="box center mb-row">
+            <h1>{building}</h1>
+            <div className="progress-container">
+                <CircularProgressbarWithChildren
+                    value={progress * 20}
+                    // text={progress * 20 + "%"}
+                    strokeWidth={12}
+                >
+                    <div className="progress-percent">{progress * 20}%</div>
+                    FULL
+                </CircularProgressbarWithChildren>
+            </div>
         </div>
         <br />
         <div className="box">

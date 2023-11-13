@@ -10,6 +10,7 @@
     -webkit-transition: .2s;
     transition: opacity .2s;
     margin: .4rem 0;
+    align-self: stretch;
 }
 .slider:disabled::-webkit-slider-thumb {
     display: none;

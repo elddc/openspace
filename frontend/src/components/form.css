@@ -1,20 +1,22 @@
 .form {
     flex: 1;
     min-width: 10em;
+    max-width: 14em;
     display: flex;
     flex-direction: column;
     justify-content: start;
+    padding: 1em 2em;
 }
 
 .box {
     background-color: var(--card-color);
     padding: .8em;
-    margin: .8em;
     border-radius: .7em;
     display: flex;
     flex-direction: column;
     justify-content: start;
-    width: 75%;
+    width: 100%;
+    box-sizing: content-box;
 }
 .box label {
     font-weight: 500;
@@ -31,10 +33,12 @@
 
 .progress-container {
     width: 60%;
+    min-width: 8em;
+    align-self: center;
     aspect-ratio: 1;
     color: black;
     font-weight: bold;
-    
+
 }
 .progress-container .CircularProgressbar-path {
     stroke: var(--circleprogress-color);
@@ -45,4 +49,15 @@
 
 .progress-percent {
     font-size: 2.2em;
+}
+
+@media (max-width: 30rem) {
+    .form {
+        max-width: none;
+    }
+    .progress-container {
+        font-size: .9em;
+        width: 40%;
+        min-width: none;
+    }
 }
