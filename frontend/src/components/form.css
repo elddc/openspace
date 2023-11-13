@@ -10,10 +10,23 @@
     background-color: var(--card-color);
     padding: .8em;
     margin: .8em;
+    border-radius: .7em;
     display: flex;
     flex-direction: column;
     justify-content: start;
     width: 75%;
+}
+.box label {
+    font-weight: 500;
+    font-size: .85em;
+    margin-bottom: .8em;
+}
+.slider-label-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    font-size: .8em;
+    font-weight: 500;
 }
 
 .progress-container {

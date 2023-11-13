@@ -56,10 +56,12 @@ const Form = ({text}) => {
         </div>
         <br />
         <div className="box">
-            <Slider value={busyness} setValue={setBusyness}/>
-            <br />
-            <Button callback={() => setBusyness(Math.max(busyness - 1, 0))}>Decrease busyness</Button>
-            <Button callback={() => setBusyness(Math.min(busyness + 1, 5))}>Increase busyness</Button>
+            <label htmlFor="busyness-slider">How full would you consider the building to be?</label>
+            <Slider id="busyness-slider" value={busyness} setValue={setBusyness}/>
+            <div className="slider-label-container">
+                <div>0%</div>
+                <div>100%</div>
+            </div>
         </div>
     </div>
 }
