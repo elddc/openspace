@@ -5,7 +5,7 @@ import Map from "./components/Map";
 
 function App() {
     return (
-        <main>
+        <main className="mb-col">
             <Form />
             <Map />
         </main>

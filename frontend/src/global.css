@@ -5,6 +5,8 @@
     --card-color: #eaebec;
     --main-color: #f18354;
     --secondary-color: #cbced0;
+    --circleprogress-color: #FF1E1E;
+    --circleprogbg-color: #CBCED0;
 }
 html, body, #root, main {
     height: 100%;
@@ -19,6 +21,10 @@ main {
     font-size: 18px;
     color: var(--text-color);
     background: var(--bg-color);
+}
+h1 {
+    margin-top: 0;
+    margin-bottom: .4em;
 }
 
 .row {
@@ -38,7 +44,14 @@ main {
 }
 
 @media (max-width: 30rem) {
-    main {
-        flex-direction: column;
+    .mb-col {
+        flex-direction: column-reverse;
+    }
+    .mb-row, div.mb-row {
+        flex-direction: row;
+        justify-content: space-between;
+    }
+    h1 {
+        margin-bottom: 0;
     }
 }
