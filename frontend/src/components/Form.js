@@ -19,8 +19,8 @@ const Form = ({text}) => {
         axios.get("http://127.0.0.1:5000/building", {
             signal: controller.signal
         }).then(res => {
-            // console.log("buildings: " + res.data);
-            // console.log("names: " + res.data.map(({name}) => name));
+            console.log("buildings: " + res.data);
+            console.log("names: " + res.data.map(({name}) => name));
             setBuildings(res.data);
             setCurrentBuilding("CIF");
         }).catch(err => console.log(err));
@@ -34,7 +34,7 @@ const Form = ({text}) => {
                 params: { "name": currentBuilding },
                 signal: controller.signal
             }).then(res => {
-                // console.log("busyness: " + res.data);
+                console.log("busyness: " + res.data);
                 setBusyness(res.data);
                 setProgress(res.data);
             }).catch(err => console.log(err));
@@ -47,6 +47,7 @@ const Form = ({text}) => {
 
     // update db every time busyness changes
     useEffect(() => {
+        console.log(busyness);
         const controller = new AbortController();
         if (busyness >= 0) {
             axios.post("http://127.0.0.1:5000/building", {
@@ -55,9 +56,12 @@ const Form = ({text}) => {
             }, {
                 signal: controller.signal
             }).then(res => {
-                // console.log("progress: " + res.data);
+                console.log("progress: " + res.data);
                 setProgress(res.data);
-            }).catch(err => console.log(err));
+            }).catch(err => {
+                console.log(err);
+                console.log("cancelled " + busyness);
+            });
         }
         else {
             console.log("GET request in progress, please wait for the page to finish loading");
@@ -89,6 +93,8 @@ const Form = ({text}) => {
                 <div>0%</div>
                 <div>100%</div>
             </div>
+            <button onClick={() => console.log(busyness)}>Busyness</button>
+            <button onClick={() => console.log(progress)}>Progress</button>
         </div>
     </div>
 }
