@@ -15,20 +15,26 @@ const Form = ({text}) => {
 
     // initial get request
     useEffect(() => {
-        axios.get("http://127.0.0.1:5000/building").then(res => {
-            console.log(res.data);
-            console.log(res.data.map(({name}) => name));
+        const controller = new AbortController();
+        axios.get("http://127.0.0.1:5000/building", {
+            signal: controller.signal
+        }).then(res => {
+            // console.log("buildings: " + res.data);
+            // console.log("names: " + res.data.map(({name}) => name));
             setBuildings(res.data);
             setCurrentBuilding("CIF");
         }).catch(err => console.log(err));
+        return () => {controller.abort()};
     }, []);
 
     useEffect(() => {
+        const controller = new AbortController();
         if (currentBuilding) {
             axios.get("http://127.0.0.1:5000/building", {
-                params: { "name": currentBuilding }
+                params: { "name": currentBuilding },
+                signal: controller.signal
             }).then(res => {
-                // console.log(res);
+                // console.log("busyness: " + res.data);
                 setBusyness(res.data);
                 setProgress(res.data);
             }).catch(err => console.log(err));
@@ -36,22 +42,27 @@ const Form = ({text}) => {
         else {
             console.log("GET request in progress, please wait for the page to finish loading");
         }
+        return () => {controller.abort()};
     }, [currentBuilding]);
 
     // update db every time busyness changes
     useEffect(() => {
+        const controller = new AbortController();
         if (busyness >= 0) {
             axios.post("http://127.0.0.1:5000/building", {
                 name: currentBuilding,
                 busyness
+            }, {
+                signal: controller.signal
             }).then(res => {
-                // console.log(res);
+                // console.log("progress: " + res.data);
                 setProgress(res.data);
             }).catch(err => console.log(err));
         }
         else {
             console.log("GET request in progress, please wait for the page to finish loading");
         }
+        return () => {controller.abort()};
     }, [busyness]);
 
     return <div className="form center">
