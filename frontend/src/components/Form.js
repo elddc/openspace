@@ -1,8 +1,8 @@
-import {useState, useEffect} from "react";
+import {useState, useEffect, useRef} from "react";
 import Slider from "./Slider";
 import Button from "./Button";
 import axios from "axios";
-// import {CircularProgressbar} from "react-circular-progressbar";
+import debounce from "debounce";
 import { CircularProgressbarWithChildren } from 'react-circular-progressbar';
 import "react-circular-progressbar/dist/styles.css";
 import "./form.css";
@@ -12,6 +12,7 @@ const Form = ({text}) => {
     const [progress, setProgress] = useState(-1);
     const [currentBuilding, setCurrentBuilding] = useState(null);
     const [buildings, setBuildings] = useState(null);
+    const debounceUpdate = useRef();
 
     // initial get request
     useEffect(() => {
@@ -23,6 +24,7 @@ const Form = ({text}) => {
             console.log("names: " + res.data.map(({name}) => name));
             setBuildings(res.data);
             setCurrentBuilding("CIF");
+            debounceUpdate.current = debounce(updateBusyness, 10);
         }).catch(err => console.log(err));
         return () => {controller.abort()};
     }, []);
@@ -47,14 +49,10 @@ const Form = ({text}) => {
 
     // update db every time busyness changes
     useEffect(() => {
-        console.log(busyness);
-        const controller = new AbortController();
         if (busyness >= 0) {
             axios.post("http://127.0.0.1:5000/building", {
                 name: currentBuilding,
                 busyness
-            }, {
-                signal: controller.signal
             }).then(res => {
                 console.log("progress: " + res.data);
                 setProgress(res.data);
@@ -66,8 +64,11 @@ const Form = ({text}) => {
         else {
             console.log("GET request in progress, please wait for the page to finish loading");
         }
-        return () => {controller.abort()};
     }, [busyness]);
+
+    const updateBusyness = (val) => {
+        setBusyness(val);
+    }
 
     return <div className="form center">
         <div className="box center mb-row">
@@ -88,7 +89,7 @@ const Form = ({text}) => {
         <br />
         <div className="box">
             <label htmlFor="busyness-slider">How full would you consider the building to be?</label>
-            <Slider id="busyness-slider" value={busyness} setValue={setBusyness}/>
+            <Slider id="busyness-slider" value={busyness} setValue={debounceUpdate.current}/>
             <div className="slider-label-container">
                 <div>0%</div>
                 <div>100%</div>
