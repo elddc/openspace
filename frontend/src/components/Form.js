@@ -1,4 +1,5 @@
 import {useState, useEffect, useRef} from "react";
+import Select from 'react-select';
 import Slider from "./Slider";
 import Button from "./Button";
 import axios from "axios";
@@ -20,8 +21,8 @@ const Form = ({text}) => {
         axios.get("http://127.0.0.1:5000/building", {
             signal: controller.signal
         }).then(res => {
-            // console.log("buildings: " + res.data);
-            // console.log("names: " + res.data.map(({name}) => name));
+            console.log("buildings: " , res.data);
+            console.log("names: " + res.data.map(({name}) => name));
             setBuildings(res.data);
             setCurrentBuilding("CIF"); // default
             debounceUpdate.current = debounce(updateBusyness, 10);
@@ -73,6 +74,15 @@ const Form = ({text}) => {
     }
 
     return <div className="form center">
+        {buildings &&
+            <div className="dropdown">
+                <Select
+                    defaultValue={currentBuilding}
+                    onChange={({value}) => setCurrentBuilding(value)}
+                    options={buildings.map(({name}) => ({value: name, label: name}))}
+                />
+            </div>
+        }
         <div className="box center mb-row">
             <h1>{currentBuilding || "Loading..."}</h1>
             <div className="progress-container">
