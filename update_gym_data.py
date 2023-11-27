@@ -6,13 +6,14 @@ url = 'https://goboardapi.azurewebsites.net/api/FacilityCount/GetCountsByAccount
 # List of entries of gym data
 entry_list = requests.get(url).json()
 
-# # Manually view specific entry data
+# Manually view specific entry data
 # for entry in entry_list:
 #     if (entry['FacilityName'] == "ARC"):
 #         print(entry['FacilityName'], entry['LocationName'], entry['LastUpdatedDateAndTime'])
 
+# Find the last updated date and time using entry['LastUpdatedDateAndTime']
 
-# Rate "Busyness" between 1-5.
+# Rate "Busyness" between 0-5.
 # ARC and CRCE are the only gym buildings that are updated consistently on the API,
 # thus ARC and CRCE are the only gym buildings that will have live updates.
 
@@ -42,14 +43,22 @@ for entry in entry_list:
 print(ARC_CAP)
 print(CRCE_CAP)
 
-# Find the busyness (1-5) at ARC and CRCE --> NEEDS TO BE IMPLEMENTED
-ARC_BUSYNESS = 18
-CRCE_BUSYNESS = 18
+# Find the busyness (0-5) at ARC and CRCE
+# Range: 0 to cap / 10 -> 0
+# cap / 10 to 3 cap / 10 -> 1
+# 3 cap / 10 to 5 cap / 10 -> 2
+# ...
+# 9 cap / 10 to cap -> 5
+ARC_BUSYNESS = round(5 * ARC_COUNT / ARC_CAP)
+CRCE_BUSYNESS = round(5 * CRCE_COUNT / CRCE_CAP)
 
+print(ARC_BUSYNESS)
+print(CRCE_BUSYNESS)
 
 # Update gym data
 r = requests.post('http://localhost:5000/building', json={'name':"ARC", 'busyness': ARC_BUSYNESS})
 r = requests.post('http://localhost:5000/building', json={'name':"CRCE", 'busyness': CRCE_BUSYNESS})
+
 
 # r = requests.get('http://localhost:5000/building', json={'name':"ARC"})
 # print(str(r))
