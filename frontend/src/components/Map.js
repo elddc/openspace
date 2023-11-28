@@ -21,6 +21,53 @@ const Map = () => {
 		  center: [lng, lat],
 		  zoom: zoom
 		});
+
+		map.current.on('load', () => {
+			// Add a data source containing GeoJSON data.
+			map.current.addSource('cif', {
+			  'type': 'geojson',
+			  'data': {
+				'type': 'Feature',
+				'geometry': {
+				  'type': 'Polygon',
+				  // These coordinates outline Maine.
+				  'coordinates': [
+					[
+					  [-88.22879, 40.11262],
+					  [-88.22779, 40.11262],
+					  [-88.22779, 40.11231],
+					  [-88.22879, 40.11231],
+					  [-88.22879, 40.11262],
+					]
+				  ]
+				}
+			  }
+			});
+		  
+			// Add a new layer to visualize the polygon.
+			map.current.addLayer({
+			  'id': 'cif',
+			  'type': 'fill',
+			  'source': 'cif', // reference the data source
+			  'layout': {},
+			  'paint': {
+				'fill-color': '#ff3a17', // blue color fill
+				'fill-opacity': 0.25
+			  }
+			});
+			// Add a black outline around the polygon.
+			map.current.addLayer({
+			  'id': 'outline',
+			  'type': 'line',
+			  'source': 'cif',
+			  'layout': {},
+			  'paint': {
+				'line-color': '#000',
+				'line-width': 2
+			  }
+			});
+		  });
+
 	  });
 
  	return <div>
