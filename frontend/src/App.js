@@ -1,14 +1,14 @@
-import './App.css';
+import './global.css';
 
 import Form from "./components/Form";
+import Map from "./components/Map";
 
 function App() {
     return (
-        <div className="App">
-            <header className="App-header">
-                <Form />
-            </header>
-        </div>
+        <main className="mb-col">
+            <Form />
+            <Map />
+        </main>
     );
 }
 
