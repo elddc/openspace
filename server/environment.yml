@@ -19,7 +19,7 @@ dependencies:
   - xz=5.4.2
   - zlib=1.2.13
   - pip:
-    - alembic==1.12.1
+      - alembic==1.12.1
       - attrs==23.1.0
       - blinker==1.6.2
       - certifi==2023.7.22

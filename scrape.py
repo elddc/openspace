@@ -32,6 +32,7 @@ busyness = {
 rounded = datetime.now() - (datetime.now() - datetime.min) % timedelta(minutes=30)
 meridian = ("am", "pm")[bool(int((datetime.now()).strftime('%H')) > 11)]
 current_time = (rounded.strftime('%Y/%m/%d %I:%M:%S'))[11:16] + meridian
+next_time = ((rounded + timedelta(minutes=30)).strftime('%Y/%m/%d %I:%M:%S'))[11:16] + meridian
 
 # # open selenium instance
 options = Options()
@@ -45,15 +46,16 @@ for key in id:
     # url to scrape
     url = base + "spaces?lid=" + str(id[key]) + args
 
+    print(url)
     # # navigate to url
     driver.get(url)
 
     # wait for page load
-    sleep(.05)
+    sleep(1)
 
     # # extract data
     events = [ev.get_attribute("title") for ev in driver.find_elements(By.CLASS_NAME, "fc-event-today")
-              if current_time in ("0" + ev.get_attribute("title"))]
+              if current_time in ("0" + ev.get_attribute("title")) or next_time in ("0" + ev.get_attribute("title"))]
 
     if len(events) == 0:
         busyness[key] = 0
