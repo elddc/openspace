@@ -42,11 +42,15 @@ const Map = ({buildings, currentBuilding, setCurrentBuilding}) => {
                         // These coordinates outline Maine.
                         'coordinates': [
                             [
-                                [-88.22879, 40.11262],
+                                [-88.22875, 40.11262],
                                 [-88.22779, 40.11262],
-                                [-88.22779, 40.11231],
+                                [-88.22779, 40.11239],
+								[-88.22783, 40.11239],
+								[-88.22783, 40.11231],
                                 [-88.22879, 40.11231],
-                                [-88.22879, 40.11262],
+								[-88.22879, 40.11238],
+								[-88.22875, 40.11238],
+                                [-88.22875, 40.11262],
                             ]
                         ]
                     }
@@ -75,6 +79,34 @@ const Map = ({buildings, currentBuilding, setCurrentBuilding}) => {
                     'line-width': 2
                 }
             });
+
+			// When a click event occurs on a feature in the states layer,
+			// open a popup at the location of the click, with description
+			// HTML from the click event's properties.
+			map.current.on('click', 'cif', (e) => {
+				// new mapboxgl.Popup()
+				// .setLngLat(e.lngLat)
+				// .setHTML(e.features[0].properties.name)
+				// .addTo(map);
+				setCurrentBuilding("Campus Instructional Facility (CIF)");
+				map.current.flyTo({
+					center: [-88.22829,40.11247],
+					zoom: zoom
+				});
+				
+			});
+				
+			// Change the cursor to a pointer when
+			// the mouse is over the states layer.
+			map.current.on('mouseenter', 'cif', () => {
+				map.current.getCanvas().style.cursor = 'pointer';
+			});
+				
+			// Change the cursor back to a pointer
+			// when it leaves the states layer.
+			map.current.on('mouseleave', 'cif', () => {
+				map.current.getCanvas().style.cursor = '';
+			});
         });
 
     }, []);
