@@ -16,19 +16,74 @@ db.init_app(app)
 
 CORS(app)  # not needed for prod
 
-@app.get("/building")
-def getBuilding():
-    if request.args.get("name"):
-        return getBuildingByName(request.args.get("name"))
-    return getAllBuildings()
+# https://docs.sqlalchemy.org/en/20/tutorial/orm_data_manipulation.html
 
-def getBuildingByName(name):
+# Create/POST
+@app.post("/new/building")
+def add_building():
+    # print(request.json)
+    # Create a building and add it to the database
+    # Database will automatically generate and add uuid for building (generated based on name?)
+    building = model.Building(
+        name=str(request.json["name"]),
+        address=str(request.json["address"]),
+        location=str(request.json["location"]),
+        capacity=str(request.json["capacity"]),
+        busyness=int(request.json["busyness"]),
+        # name="test",
+        # busyness=3,
+    )
+    db.session.add(building)
+    db.session.commit()
+    # Set the busyness of the building and add to appropriate row of database
+    # building.busyness = int(request.json["busyness"])
+    # db.session.commit()
+
+    input = model.Input(
+        building_id=building.id,
+        busyness=building.busyness
+    )
+    db.session.add(input)
+
+    db.session.commit()
+
+    toRet = building.busyness
+    db.session.close()
+    return str(toRet)
+
+@app.post("/building")
+def update_building():
+    building = db.session.execute(db.select(model.Building).filter_by(name=request.json["name"])).scalar()
+    building.busyness = int(request.json["busyness"])
+    db.session.add(building)
+    db.session.commit()
+
+    input = model.Input(
+        building_id=building.id,
+        busyness=building.busyness
+    )
+    db.session.add(input)
+
+    db.session.commit()
+
+    toRet = building.busyness
+    db.session.close()
+    return str(toRet)
+
+
+@app.get("/building")
+def get_building():
+    if request.args.get("name"):
+        return get_building_by_name(request.args.get("name"))
+    return get_all_buildings()
+
+def get_building_by_name(name):
     data = db.session.execute(
         db.select(model.Building).where(model.Building.name == name)
     ).scalar()
     return str(data.busyness)
 
-def getAllBuildings():
+def get_all_buildings():
     data = db.session.execute(db.select(model.Building))
     # instantiate empty list of all buildings that will be populated with dictionaries of each building
     buildings = list()
@@ -50,30 +105,23 @@ def getAllBuildings():
     # list of dictionary
     return buildings
 
-@app.post("/building")
-def updateBuilding():
-    data = db.session.execute(
-        db.select(model.Building).where(model.Building.name == request.json["name"])
-    ).scalar()
-    data.busyness = request.json["busyness"]
-    db.session.commit()
-    return str(request.json["busyness"])
+
 
 
 
 @app.get("/room")
-def getRoom():
+def get_room():
     if request.args.get("name"):
-        return getRoomByName(request.args.get("name"))
-    return getAllRooms()
+        return get_room_by_name(request.args.get("name"))
+    return get_all_rooms()
 
-def getRoomByName(name):
+def get_room_by_name(name):
     data = db.session.execute(
         db.select(model.Room).where(model.Room.name == name)
     ).scalar()
     return str(data.busyness)
 
-def getAllRooms():
+def get_all_rooms():
     data = db.session.execute(db.select(model.Room))
     # instantiate empty list of all buildings that will be populated with dictionaries of each building
     rooms = list()
@@ -93,26 +141,27 @@ def getAllRooms():
     # non-JSON
     return rooms
 
-@app.post("/room")
-def updateRoom():
-    # db.session.add(model.Input(
-    #     name = "CIF",
-    #     busyness = request.json["busyness"],
-    # ))
-    # print(db.session.new)
-    # db.session.commit()
+# Doesn't work
+# @app.post("/room")
+# def updateRoom():
+#     # db.session.add(model.Input(
+#     #     name = "CIF",
+#     #     busyness = request.json["busyness"],
+#     # ))
+#     # print(db.session.new)
+#     # db.session.commit()
 
-    # with Session(engine) as session:
-    user = model.Room(
-        # id="",
-        name=str(request.json["name"]),
-        busyness=int(request.json["busyness"]),
-        # last_updated="",
-    )
-    db.session.add(user)
+#     # with Session(engine) as session:
+#     user = model.Room(
+#         # id="",
+#         name=str(request.json["name"]),
+#         busyness=int(request.json["busyness"]),
+#         # last_updated="",
+#     )
+#     db.session.add(user)
 
-    db.session.flush()
-    return str(request.json["busyness"])
+#     db.session.flush()
+#     return str(request.json["busyness"])
 
 
 

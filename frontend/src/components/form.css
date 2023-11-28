@@ -6,6 +6,8 @@
     flex-direction: column;
     justify-content: start;
     padding: 1em 2em;
+    overflow-y: auto;
+    overflow-x: hidden;
 }
 
 .box {
@@ -54,6 +56,10 @@
 @media (max-width: 30rem) {
     .form {
         max-width: none;
+        flex: 4;
+    }
+    .form h1 {
+        font-size: 1.8em;
     }
     .progress-container {
         font-size: .9em;
