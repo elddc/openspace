@@ -1,4 +1,19 @@
 .map {
     background: #ddd;
     flex: 3;
+    position: relative;
 }
+
+.dropdown {
+    position: absolute;
+    top: 2em;
+    width: 80%;
+    max-width: 35em;
+    z-index: 5;
+}
+
+.map-container {
+    height: 100%;
+    width: 100%;
+}
+

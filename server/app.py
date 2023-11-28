@@ -20,7 +20,7 @@ CORS(app)  # not needed for prod
 
 # Create/POST
 @app.post("/new/building")
-def post():
+def add_building():
     # print(request.json)
     # Create a building and add it to the database
     # Database will automatically generate and add uuid for building (generated based on name?)
@@ -50,7 +50,7 @@ def post():
     return str(toRet)
 
 @app.post("/building")
-def patch():
+def update_building():
     building = db.session.execute(db.select(model.Building).filter_by(name=request.json["name"])).scalar()
     building.busyness = int(request.json["busyness"])
     db.session.add(building)
@@ -64,24 +64,24 @@ def patch():
 
     db.session.commit()
 
-    toRet = building.name
+    toRet = building.busyness
     db.session.close()
     return str(toRet)
 
 
 @app.get("/building")
-def getBuilding():
+def get_building():
     if request.args.get("name"):
-        return getBuildingByName(request.args.get("name"))
-    return getAllBuildings()
+        return get_building_by_name(request.args.get("name"))
+    return get_all_buildings()
 
-def getBuildingByName(name):
+def get_building_by_name(name):
     data = db.session.execute(
         db.select(model.Building).where(model.Building.name == name)
     ).scalar()
     return str(data.busyness)
 
-def getAllBuildings():
+def get_all_buildings():
     data = db.session.execute(db.select(model.Building))
     # instantiate empty list of all buildings that will be populated with dictionaries of each building
     buildings = list()
@@ -108,18 +108,18 @@ def getAllBuildings():
 
 
 @app.get("/room")
-def getRoom():
+def get_room():
     if request.args.get("name"):
-        return getRoomByName(request.args.get("name"))
-    return getAllRooms()
+        return get_room_by_name(request.args.get("name"))
+    return get_all_rooms()
 
-def getRoomByName(name):
+def get_room_by_name(name):
     data = db.session.execute(
         db.select(model.Room).where(model.Room.name == name)
     ).scalar()
     return str(data.busyness)
 
-def getAllRooms():
+def get_all_rooms():
     data = db.session.execute(db.select(model.Room))
     # instantiate empty list of all buildings that will be populated with dictionaries of each building
     rooms = list()
