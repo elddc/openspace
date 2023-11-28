@@ -2,3 +2,9 @@
     background: #ddd;
     flex: 3;
 }
+
+.map-container {
+    height: 400px;
+    width: 800px;
+  }
+  
