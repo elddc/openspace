@@ -59,9 +59,9 @@ print(ARC_BUSYNESS)
 print(CRCE_BUSYNESS)
 
 # Update gym data
-r = requests.post('http://localhost:5000/building', json={'name':"ARC", 'busyness': ARC_BUSYNESS})
-r = requests.post('http://localhost:5000/building', json={'name':"CRCE", 'busyness': CRCE_BUSYNESS})
+r = requests.post('http://127.0.0.1:5000/building', json={'name':"ARC", 'busyness': ARC_BUSYNESS})
+r = requests.post('http://127.0.0.1:5000/building', json={'name':"CRCE", 'busyness': CRCE_BUSYNESS})
 print(r)
 
-r = requests.get('http://localhost:5000/building', json={'name':"ARC"})
+r = requests.get('http://127.0.0.1:5000/building', json={'name':"ARC"})
 print(r)
