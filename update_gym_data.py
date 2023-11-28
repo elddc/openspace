@@ -7,9 +7,9 @@ url = 'https://goboardapi.azurewebsites.net/api/FacilityCount/GetCountsByAccount
 entry_list = requests.get(url).json()
 
 # Manually view specific entry data
-for entry in entry_list:
-    if (entry['FacilityName'] == "CRCE"):
-        print(entry['FacilityName'], entry['LocationName'], entry['LastCount'], entry['TotalCapacity'])
+# for entry in entry_list:
+#     if (entry['FacilityName'] == "CRCE"):
+#         print(entry['FacilityName'], entry['LocationName'], entry['LastCount'], entry['TotalCapacity'])
 
 # Find the last updated date and time using entry['LastUpdatedDateAndTime']
 
@@ -34,11 +34,14 @@ print(CRCE_COUNT)
 ARC_CAP = 0
 CRCE_CAP = 0
 
+CRCE_LOCATIONS = ["Main Gym", "Raquetball Courts", "Squash Court", "MAC Gym", "Upper Level"]
+ARC_LOCATIONS = ["Entrance Level Fitness Area", "Upper Level", "Lower Level", "Strength and Conditioning", "Gym 1", "Gym 2", "Gym 3"] 
+
 for entry in entry_list:
-    if entry['FacilityName']=="ARC":
-        ARC_CAP = ARC_CAP + int(entry['TotalCapacity'])
-    elif entry['FacilityName']=="CRCE":
+    if entry['FacilityName']=="CRCE" and entry['LocationName'].strip() in CRCE_LOCATIONS:
         CRCE_CAP = CRCE_CAP + int(entry['TotalCapacity'])
+    elif entry['FacilityName']=="ARC" and entry['LocationName'].strip() in ARC_LOCATIONS:
+        ARC_CAP = ARC_CAP + int(entry['TotalCapacity'])
 
 print(ARC_CAP)
 print(CRCE_CAP)
@@ -56,9 +59,9 @@ print(ARC_BUSYNESS)
 print(CRCE_BUSYNESS)
 
 # Update gym data
-r = requests.post('http://localhost:5000/building', json={'name':"ARC", 'busyness': ARC_BUSYNESS})
-r = requests.post('http://localhost:5000/building', json={'name':"CRCE", 'busyness': CRCE_BUSYNESS})
+r = requests.post('http://127.0.0.1:5000/building', json={'name':"ARC", 'busyness': ARC_BUSYNESS})
+r = requests.post('http://127.0.0.1:5000/building', json={'name':"CRCE", 'busyness': CRCE_BUSYNESS})
 print(r)
 
-r = requests.get('http://localhost:5000/building', json={'name':"ARC"})
+r = requests.get('http://127.0.0.1:5000/building', json={'name':"ARC"})
 print(r)
