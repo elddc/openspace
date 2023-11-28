@@ -7,9 +7,9 @@ url = 'https://goboardapi.azurewebsites.net/api/FacilityCount/GetCountsByAccount
 entry_list = requests.get(url).json()
 
 # Manually view specific entry data
-# for entry in entry_list:
-#     if (entry['FacilityName'] == "ARC"):
-#         print(entry['FacilityName'], entry['LocationName'], entry['LastUpdatedDateAndTime'])
+for entry in entry_list:
+    if (entry['FacilityName'] == "CRCE"):
+        print(entry['FacilityName'], entry['LocationName'], entry['LastCount'], entry['TotalCapacity'])
 
 # Find the last updated date and time using entry['LastUpdatedDateAndTime']
 
@@ -58,7 +58,7 @@ print(CRCE_BUSYNESS)
 # Update gym data
 r = requests.post('http://localhost:5000/building', json={'name':"ARC", 'busyness': ARC_BUSYNESS})
 r = requests.post('http://localhost:5000/building', json={'name':"CRCE", 'busyness': CRCE_BUSYNESS})
+print(r)
 
-
-# r = requests.get('http://localhost:5000/building', json={'name':"ARC"})
-# print(str(r))
+r = requests.get('http://localhost:5000/building', json={'name':"ARC"})
+print(r)
