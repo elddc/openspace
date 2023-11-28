@@ -9,10 +9,11 @@
     top: 2em;
     width: 80%;
     max-width: 35em;
+    z-index: 5;
 }
 
 .map-container {
-    height: 400px;
-    width: 800px;
-  }
-  
+    height: 100%;
+    width: 100%;
+}
+
