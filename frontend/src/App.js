@@ -17,10 +17,11 @@ function App() {
         axios.get("http://127.0.0.1:5000/building", {
             signal: controller.signal
         }).then(res => {
+            res.data.sort();
             console.log("buildings: " , res.data);
             console.log("names: " + res.data.map(({name}) => name));
             setBuildings(res.data);
-            setCurrentBuilding("CIF"); // default
+            setCurrentBuilding("Campus Instructional Facility (CIF)"); // default
         }).catch(err => console.log(err));
         return () => {controller.abort()};
     }, []);
