@@ -13,6 +13,8 @@ function App() {
 
     // initial get request, gets all building data
     useEffect(() => {
+        document.title = "OpenSpace";
+
         const controller = new AbortController();
         axios.get("http://127.0.0.1:5000/building", {
             signal: controller.signal
