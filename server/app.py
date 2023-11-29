@@ -52,6 +52,8 @@ def add_building():
 
 @app.post("/building")
 def update_building():
+    print(request.json)
+
     building = db.session.execute(db.select(model.Building).filter_by(name=request.json["name"])).scalar()
 
     # add user input
@@ -62,13 +64,16 @@ def update_building():
     db.session.add(input)
 
     # caluclate the average busyness in the last hour
-    filter_time = datetime.now() - timedelta(hours=1)
+    filter_time = datetime.now() - timedelta(minutes=15)
     average_busyness = db.session.execute(
         db.select(db.func.avg(model.Input.busyness))
         .filter_by(building_id=building.id).filter(model.Input.time_created >= filter_time)
     ).scalar()
     print(average_busyness)
-    average_busyness = int(average_busyness)
+    average_busyness = int(average_busyness * 20)
+    i = db.session.execute(db.select(model.Input).filter_by(building_id=building.id).filter(model.Input.time_created >= filter_time))
+    for j in i:
+        print(j)
 
     building.busyness = average_busyness
     db.session.add(building)

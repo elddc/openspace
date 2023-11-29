@@ -48,7 +48,7 @@ class Input(Base):
 
     time_created: Mapped[datetime.datetime] = mapped_column(default=datetime.datetime.now)
     def __repr__(self) -> str:
-        return f"Input(id={self.id!r}, busyness={self.busyness!r})"
+        return f"Input(id={self.id!r}, busyness={self.busyness!r}, time_created={self.time_created})"
 
 
 

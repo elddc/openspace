@@ -11,6 +11,7 @@
     transition: opacity .2s;
     margin: .4rem 0;
     align-self: stretch;
+    --slider-color: #eba563;
 }
 .slider:disabled::-webkit-slider-thumb {
     display: none;
@@ -24,10 +25,10 @@
     border-radius: 5%;
     background: var(--bg-color);
     cursor: pointer;
-    box-shadow: -200px 0 0 200px var(--main-color);
+    box-shadow: -200px 0 0 200px var(--slider-color);
 }
 .slider::-webkit-slider-runnable-track {
     height: 100%;
     -webkit-appearance: none;
-    color: var(--main-color);
+    color: var(--slider-color);
 }

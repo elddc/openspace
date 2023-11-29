@@ -28,21 +28,21 @@ const Map = ({buildings, currentBuilding, setCurrentBuilding}) => {
     }, [currentBuilding]);
 
     useEffect(() => {
-        console.log("update buildings");
-
         if (buildings && map.current) {
             for (const {name, location, busyness} of Object.values(buildings)) {
                 if (location) {
-                    map.current.getSource(name).setData({
-                        'type': 'Feature',
-                        'geometry': {
-                            'type': 'Polygon',
-                            'coordinates': [JSON.parse(location)[1]]
-                        },
-                        'properties': {
-                            'busyness': parseInt(busyness)
-                        }
-                    });
+                    try {
+                        map.current.getSource(name).setData({
+                            'type': 'Feature',
+                            'geometry': {
+                                'type': 'Polygon',
+                                'coordinates': [JSON.parse(location)[1]]
+                            },
+                            'properties': {
+                                'busyness': parseInt(busyness)
+                            }
+                        });
+                    } catch (err) {console.log(err)}
                 }
             }
         }

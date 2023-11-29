@@ -48,6 +48,7 @@
 
 }
 .progress-container .CircularProgressbar-path {
+    /* default color, overridden in Form.js*/
     stroke: var(--circleprogress-color);
 }
 .progress-container .CircularProgressbar-trail {

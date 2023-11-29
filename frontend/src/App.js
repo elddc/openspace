@@ -35,7 +35,8 @@ function App() {
                 signal: controller.signal
             }).then(res => {
                 // console.log("busyness: " + res.data);
-                setBusyness(res.data);
+                setBusyness(res.data / 20);
+                console.log(res.data);
                 setProgress(res.data);
             }).catch(err => console.log(err));
         }
@@ -46,44 +47,37 @@ function App() {
     }, [currentBuilding]);
 
     // update db every time busyness changes
-    useEffect(() => {
-        if (busyness >= 0) {
-            axios.post("http://127.0.0.1:5000/building", {
-                name: currentBuilding,
-                busyness
-            }).then(res => {
-                console.log("progress: " + res.data);
-                setProgress(res.data)
-                console.log(busyness);
-                setBuildings({
-                    ...buildings,
-                    [currentBuilding]: {...buildings[currentBuilding], busyness}
-                })
-            }).catch(err => {
-                console.log(err);
-                console.log("cancelled " + busyness);
+    const updateBusyness = (input) => {
+        setBusyness(input);
+        axios.post("http://127.0.0.1:5000/building", {
+            name: currentBuilding,
+            busyness: input
+        }).then(res => {
+            console.log("progress: " + res.data);
+            setProgress(res.data)
+            console.log(busyness);
+            setBuildings({
+                ...buildings,
+                [currentBuilding]: {...buildings[currentBuilding], busyness}
             });
-        }
-        else {
-            console.log("GET request in progress, please wait for the page to finish loading");
-        }
-    }, [busyness]);
+        }).catch(err => {
+            console.log(err);
+        });
+    }
 
-    return (
-        <main className="mb-col">
-            <Form
-                currentBuilding={currentBuilding}
-                progress={progress}
-                busyness={busyness}
-                setBusyness={setBusyness}
-            />
-            <Map
-                buildings={buildings}
-                currentBuilding={currentBuilding}
-                setCurrentBuilding={setCurrentBuilding}
-            />
-        </main>
-    );
+    return currentBuilding ? <main className="mb-col">
+        <Form
+            currentBuilding={currentBuilding}
+            progress={progress}
+            busyness={busyness}
+            setBusyness={updateBusyness}
+        />
+        <Map
+            buildings={buildings}
+            currentBuilding={currentBuilding}
+            setCurrentBuilding={setCurrentBuilding}
+        />
+    </main> : <main className="center"><h1>Loading...</h1></main>;
 }
 
 export default App;
