@@ -4,10 +4,15 @@
     max-width: 14em;
     display: flex;
     flex-direction: column;
-    justify-content: start;
+    justify-content: center;
+    align-items: center;
     padding: 1em 2em;
     overflow-y: auto;
     overflow-x: hidden;
+}
+.info {
+    font-size: .8em;
+    margin-top: 2em;
 }
 
 .box {
@@ -57,6 +62,7 @@
     .form {
         max-width: none;
         flex: 4;
+        justify-content: start;
     }
     .form h1 {
         font-size: 1.8em;

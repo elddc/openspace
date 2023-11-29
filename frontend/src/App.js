@@ -13,14 +13,15 @@ function App() {
 
     // initial get request, gets all building data
     useEffect(() => {
+        document.title = "OpenSpace";
+
         const controller = new AbortController();
         axios.get("http://127.0.0.1:5000/building", {
             signal: controller.signal
         }).then(res => {
-            console.log("buildings: " , res.data);
-            console.log("names: " + res.data.map(({name}) => name));
+            console.log("buildings:", res.data);
             setBuildings(res.data);
-            setCurrentBuilding("CIF"); // default
+            setCurrentBuilding("Campus Instructional Facility (CIF)"); // default
         }).catch(err => console.log(err));
         return () => {controller.abort()};
     }, []);
@@ -52,7 +53,12 @@ function App() {
                 busyness
             }).then(res => {
                 console.log("progress: " + res.data);
-                setProgress(res.data);
+                setProgress(res.data)
+                console.log(busyness);
+                setBuildings({
+                    ...buildings,
+                    [currentBuilding]: {...buildings[currentBuilding], busyness}
+                })
             }).catch(err => {
                 console.log(err);
                 console.log("cancelled " + busyness);
