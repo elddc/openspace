@@ -1,5 +1,16 @@
 import requests
 import json
+from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker
+from dotenv import load_dotenv
+import os
+
+from db_helper import update_building
+
+load_dotenv()
+engine = create_engine(os.getenv("DB_URI"))
+Session = sessionmaker(engine)
+
 
 url = 'https://goboardapi.azurewebsites.net/api/FacilityCount/GetCountsByAccount?AccountAPIKey=38902ca4-0d3b-409e-903e-615e5e530612'
 
@@ -27,7 +38,7 @@ for entry in entry_list:
     elif entry['FacilityName']=="CRCE":
         CRCE_COUNT = CRCE_COUNT + int(entry['LastCount'])
 
-print(ARC_COUNT)
+print("COUNTS: ", ARC_COUNT)
 print(CRCE_COUNT)
 
 # Find the max capacity at ARC and CRCE
@@ -43,7 +54,7 @@ for entry in entry_list:
     elif entry['FacilityName']=="ARC" and entry['LocationName'].strip() in ARC_LOCATIONS:
         ARC_CAP = ARC_CAP + int(entry['TotalCapacity'])
 
-print(ARC_CAP)
+print("CAPs: ", ARC_CAP)
 print(CRCE_CAP)
 
 # Find the busyness (0-5) at ARC and CRCE
@@ -52,16 +63,18 @@ print(CRCE_CAP)
 # 3 cap / 10 to 5 cap / 10 -> 2
 # ...
 # 9 cap / 10 to cap -> 5
-ARC_BUSYNESS = round(5 * ARC_COUNT / ARC_CAP)
-CRCE_BUSYNESS = round(5 * CRCE_COUNT / CRCE_CAP)
+ARC_BUSYNESS = round(100 * ARC_COUNT / ARC_CAP)
+CRCE_BUSYNESS = round(100 * CRCE_COUNT / CRCE_CAP)
 
-print(ARC_BUSYNESS)
+print("BUSYNESS: ", ARC_BUSYNESS)
 print(CRCE_BUSYNESS)
 
 # Update gym data
-r = requests.post('http://127.0.0.1:5000/building', json={'name':"ARC", 'busyness': ARC_BUSYNESS})
-r = requests.post('http://127.0.0.1:5000/building', json={'name':"CRCE", 'busyness': CRCE_BUSYNESS})
-print(r)
-
-r = requests.get('http://127.0.0.1:5000/building', json={'name':"ARC"})
-print(r)
+# r = requests.post('http://127.0.0.1:5000/building', json={'name':"ARC", 'busyness': ARC_BUSYNESS})
+# r = requests.post('http://127.0.0.1:5000/building', json={'name':"CRCE", 'busyness': CRCE_BUSYNESS})
+# print(r)
+with Session() as session:
+    update_building(session, "ARC", ARC_BUSYNESS)
+    update_building(session, "CRCE", CRCE_BUSYNESS)
+# r = requests.get('http://127.0.0.1:5000/building', json={'name':"ARC"})
+# print(r)
