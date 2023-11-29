@@ -8,6 +8,7 @@
     --circleprogress-color: #FF1E1E;
     --circleprogbg-color: #CBCED0;
     --scrollbar-color: #aaaaaa;
+    --scrollbar-width: 8px;
 }
 html, body, #root, main {
     height: 100%;
@@ -29,7 +30,7 @@ h1 {
     margin-bottom: .4em;
 }
 ::-webkit-scrollbar {
-    width: 8px;
+    width: var(--scrollbar-width);
 }
 ::-webkit-scrollbar-track {
     background-color: var(--bg-color);
@@ -48,10 +49,8 @@ h1 {
     justify-content: center;
     align-items: center;
 }
-.card {
-    background: var(--card-color);
-    border-radius: 1em;
-    margin: .8em;
+.mb-row {
+    flex-direction: column;
 }
 
 @media (max-width: 30rem) {

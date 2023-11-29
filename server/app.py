@@ -7,6 +7,7 @@ import os
 from dotenv import load_dotenv
 import schema as model
 import json
+from datetime import datetime, timedelta
 
 load_dotenv()
 db = SQLAlchemy(model_class=model.Base)
@@ -54,15 +55,25 @@ def add_building():
 @app.post("/building")
 def update_building():
     building = db.session.execute(db.select(model.Building).filter_by(name=request.json["name"])).scalar()
-    building.busyness = int(request.json["busyness"])
-    db.session.add(building)
-    db.session.commit()
 
+    # add user input
     input = model.Input(
         building_id=building.id,
-        busyness=building.busyness
+        busyness=int(request.json["busyness"])
     )
     db.session.add(input)
+
+    # caluclate the average busyness in the last hour
+    filter_time = datetime.now() - timedelta(hours=1)
+    average_busyness = db.session.execute(
+        db.select(db.func.avg(model.Input.busyness))
+        .filter_by(building_id=building.id).filter(model.Input.time_created >= filter_time)
+    ).scalar()
+    print(average_busyness)
+    average_busyness = int(average_busyness)
+
+    building.busyness = average_busyness
+    db.session.add(building)
 
     db.session.commit()
 
