@@ -28,11 +28,9 @@ def add_building():
     building = model.Building(
         name=str(request.json["name"]),
         address=str(request.json["address"]),
-        location=str(request.json["location"]),
+        # location=str(request.json["location"]),
         capacity=str(request.json["capacity"]),
         busyness=int(request.json["busyness"]),
-        # name="test",
-        # busyness=3,
     )
     db.session.add(building)
     db.session.commit()

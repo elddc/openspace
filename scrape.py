@@ -3,6 +3,7 @@ from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.options import Options
 from datetime import datetime, timedelta
+from time import sleep
 
 # config, used for both scraping methods
 base = "https://uiuc.libcal.com/"
@@ -28,7 +29,11 @@ busyness = {
     "studio": 0
 }
 
-# open selenium instance
+rounded = datetime.now() - (datetime.now() - datetime.min) % timedelta(minutes=30)
+meridian = ("am", "pm")[bool(int((datetime.now()).strftime('%H')) > 11)]
+current_time = (rounded.strftime('%Y/%m/%d %I:%M:%S'))[11:16] + meridian
+
+# # open selenium instance
 options = Options()
 options.add_argument("--headless=new")
 driver = webdriver.Chrome(options=options)
@@ -43,13 +48,12 @@ for key in id:
     # # navigate to url
     driver.get(url)
 
-    rounded = datetime.now() - (datetime.now() - datetime.min) % timedelta(minutes=30)
-    meridian = ("am", "pm")[bool(int((datetime.now()).strftime('%H')) > 11)]
-    current_time = (rounded.strftime('%Y/%m/%d %I:%M:%S'))[11:16] + meridian
+    # wait for page load
+    sleep(.05)
 
     # # extract data
     events = [ev.get_attribute("title") for ev in driver.find_elements(By.CLASS_NAME, "fc-event-today")
-            if current_time in ("0" + ev.get_attribute("title"))]
+              if current_time in ("0" + ev.get_attribute("title"))]
 
     if len(events) == 0:
         busyness[key] = 0
