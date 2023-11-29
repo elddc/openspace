@@ -63,7 +63,7 @@ def update_building():
     )
     db.session.add(input)
 
-    # caluclate the average busyness in the last hour
+    # caluclate the average busyness in the last 15 minutes
     filter_time = datetime.now() - timedelta(minutes=15)
     average_busyness = db.session.execute(
         db.select(db.func.avg(model.Input.busyness))

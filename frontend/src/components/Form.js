@@ -41,7 +41,7 @@ const Form = ({currentBuilding, progress, busyness, setBusyness}) => {
             </div>
             <div>
                 <div className="info">
-                    <i>This is the average of the responses recorded in the last hour</i>
+                    <i>This is the average of the responses recorded in the last 15 minutes</i>
                 </div>
             </div>
         </div>

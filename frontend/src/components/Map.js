@@ -82,7 +82,7 @@ const Map = ({buildings, currentBuilding, setCurrentBuilding}) => {
                             'paint': {
                                 'fill-color': {
                                     'property': 'busyness',
-                                    'stops': [[0, '#0f0'], [2, '#ff0'], [5, '#f00']]
+                                    'stops': [[0, '#0f0'], [50, '#ff0'], [100, '#f00']]
                                 },
                                 'fill-opacity': 0.25
                             }
