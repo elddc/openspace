@@ -9,7 +9,7 @@ from sqlalchemy.orm import sessionmaker
 from dotenv import load_dotenv
 import os
 
-from add_building import update_building
+from db_helper import update_building
 
 load_dotenv()
 engine = create_engine(os.getenv("DB_URI"))
@@ -91,6 +91,6 @@ for key in id:
 # quit driver
 driver.quit()
 
-for building in busyness:
-    update_building(Session, building, busyness[building])
-    
+with Session.begin() as session:
+    for building in busyness:
+        update_building(session, building, busyness[building])
