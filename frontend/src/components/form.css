@@ -1,0 +1,76 @@
+.form {
+    flex: 1;
+    min-width: 10em;
+    max-width: 14em;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 1em 2em;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+.info {
+    font-size: .8em;
+    margin-top: 2em;
+}
+
+.box {
+    background-color: var(--card-color);
+    padding: .8em;
+    border-radius: .7em;
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    width: 100%;
+    box-sizing: content-box;
+}
+.box label {
+    font-weight: 500;
+    font-size: .85em;
+    margin-bottom: .8em;
+}
+.slider-label-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    font-size: .8em;
+    font-weight: 500;
+}
+
+.progress-container {
+    width: 60%;
+    min-width: 8em;
+    align-self: center;
+    aspect-ratio: 1;
+    color: black;
+    font-weight: bold;
+
+}
+.progress-container .CircularProgressbar-path {
+    /* default color, overridden in Form.js*/
+    stroke: var(--circleprogress-color);
+}
+.progress-container .CircularProgressbar-trail {
+    stroke: var(--circleprogbg-color);
+}
+
+.progress-percent {
+    font-size: 2.2em;
+}
+
+@media (max-width: 30rem) {
+    .form {
+        max-width: none;
+        flex: 4;
+        justify-content: start;
+    }
+    .form h1 {
+        font-size: 1.8em;
+    }
+    .progress-container {
+        font-size: .9em;
+        width: 40%;
+        min-width: none;
+    }
+}

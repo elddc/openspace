@@ -1,48 +1,58 @@
-import {useState, useEffect} from "react";
+import {useState, useEffect, useRef} from "react";
+import Select from 'react-select';
 import Slider from "./Slider";
 import Button from "./Button";
 import axios from "axios";
+import debounce from "debounce";
+import { CircularProgressbarWithChildren, buildStyles } from 'react-circular-progressbar';
+import "react-circular-progressbar/dist/styles.css";
+import "./form.css";
 
-const Form = ({text}) => {
-    const [busyness, setBusyness] = useState(false);
-    const [inProgress, setInProgress] = useState(true);
-    const [building, setBuilding] = useState("CIF");
+const Form = ({currentBuilding, progress, busyness, setBusyness}) => {
+    const debounceUpdate = useRef();
 
-    // initial get request
     useEffect(() => {
-        setInProgress(true);
-        axios.get("http://127.0.0.1:5000/building", {
-            params: { "name": building }
-        }).then(res => {
-            console.log(res)
-            setBusyness(res.data);
-            setInProgress(false);
-        }).catch(err => console.log(err));
-    }, []);
+        debounceUpdate.current = debounce(updateBusyness, 10);
+    }, [setBusyness]);
 
-    // update db every time busyness changes
-    useEffect(() => {
-        if (busyness) {
-            axios.post("http://127.0.0.1:5000/building", {
-                name: building,
-                busyness
-            }).then(res => {
-                console.log(res);
-            }).catch(err => console.log(err));
-        }
-        else {
-            console.log("GET request in progress, please wait for the page to finish loading");
-        }
-    }, [busyness]);
+    // debounced update function to prevent overwrites
+    const updateBusyness = (val) => {
+        setBusyness(val);
+    }
 
-    return <div>
-        <h1>{building}</h1>
-        <h3>{(busyness * 20) || '-'}% full</h3>
-        <Slider value={busyness} setValue={setBusyness}/>
+    return <div className="form">
+        <div className="box">
+            <div className="center mb-row">
+                <h1>{currentBuilding}</h1>
+                <div className="progress-container">
+                    {progress < 0 ||
+                        <CircularProgressbarWithChildren
+                            value={progress}
+                            strokeWidth={12}
+                            styles={buildStyles({
+                                pathColor: progress < 40 ? "#4bb041" : progress < 80 ? "#eba563" : "#ee3c3c"
+                            })}
+                        >
+                            <div className="progress-percent">{progress}%</div>
+                            FULL
+                        </CircularProgressbarWithChildren>
+                    }
+                </div>
+            </div>
+            <div>
+                <div className="info">
+                    <i>This is the average of the responses recorded in the last 15 minutes</i>
+                </div>
+            </div>
+        </div>
         <br />
-        <div className="row">
-            <Button callback={() => setBusyness(Math.max(busyness - 1, 0))}>Decrease busyness</Button>
-            <Button callback={() => setBusyness(Math.min(busyness + 1, 5))}>Increase busyness</Button>
+        <div className="box">
+            <label htmlFor="busyness-slider">How full would you consider the building to be?</label>
+            <Slider id="busyness-slider" value={busyness} setValue={debounceUpdate.current} />
+            <div className="slider-label-container">
+                <div>empty</div>
+                <div>packed</div>
+            </div>
         </div>
     </div>
 }
