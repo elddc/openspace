@@ -4,6 +4,16 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.options import Options
 from datetime import datetime, timedelta
 from time import sleep
+from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker
+from dotenv import load_dotenv
+import os
+
+from add_building import update_building
+
+load_dotenv()
+engine = create_engine(os.getenv("DB_URI"))
+Session = sessionmaker(engine)
 
 # config, used for both scraping methods
 base = "https://uiuc.libcal.com/"
@@ -74,11 +84,13 @@ for key in id:
             print("Unavailable: " + str(total_unavailable))
             ratio = float(total_unavailable)/len(events) * 100
 
-            busyness[key] = round((ratio)/20)
+            busyness[key] = round(ratio)
 
         print("Busyness: " + str(busyness[key]))
 
 # quit driver
 driver.quit()
 
-print(busyness)
+for building in busyness:
+    update_building(Session, building, busyness[building])
+    
