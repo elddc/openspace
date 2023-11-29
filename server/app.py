@@ -86,12 +86,12 @@ def get_building_by_name(name):
 def get_all_buildings():
     data = db.session.execute(db.select(model.Building))
     # instantiate empty list of all buildings that will be populated with dictionaries of each building
-    buildings = list()
+    buildings = {}
     for d in data:
         # turn d into schema.Building object
         b = d._mapping["Building"]
-        # turn b into a dictionary
-        building = dict(
+        # turn b into a dictionary and add to buildings
+        buildings[b.name] = dict(
             id=b.id,
             name=b.name,
             address=b.address,
@@ -100,9 +100,6 @@ def get_all_buildings():
             busyness=b.busyness,
             last_updated=b.last_updated,
         )
-        # add building to buildings
-        buildings.append(building)
-    # list of dictionary
     return buildings
 
 
