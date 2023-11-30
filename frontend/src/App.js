@@ -57,7 +57,7 @@ function App() {
             setProgress(res.data)
             setBuildings({
                 ...buildings,
-                [currentBuilding]: {...buildings[currentBuilding], busyness: progress}
+                [currentBuilding]: {...buildings[currentBuilding], busyness: res.data}
             });
         }).catch(err => {
             console.log(err);
