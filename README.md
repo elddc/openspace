@@ -1,11 +1,6 @@
 # OpenSpace UIUC
 
-This project aggregates and visualizes the occupancy of public spaces on campus.
-
-Many students have issues finding space on campus in high-demand areas.
-To help students make more informed decisions, we utilize web scraping and
-crowdsourcing data to estimate occupancy, and display our estimates in an
-user-friendly map interface.
+Many students have issues finding space on campus in high-demand areas. To help students make more informed decisions, we utilize web scraping and crowdsourcing data to estimate occupancy of public spaces on campus, and display our estimates in a user-friendly map interface. Check it out at [openspace.projectcodeuiuc.org](https://openspace.projectcodeuiuc.org/).
 
 Data is currently sourced from Campus Recreation and university libraries. 
 
