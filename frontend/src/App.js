@@ -5,7 +5,7 @@ import Form from "./components/Form";
 import Map from "./components/Map";
 import './global.css';
 
-const SERVER_URL = "https://openspace-server-test-2.vercel.app"
+const SERVER_URL = "https://openspace-uiuc-server.vercel.app"
 
 function App() {
     const [busyness, setBusyness] = useState(-1);
