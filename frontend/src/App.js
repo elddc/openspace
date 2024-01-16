@@ -5,6 +5,8 @@ import Form from "./components/Form";
 import Map from "./components/Map";
 import './global.css';
 
+const SERVER_URL = "https://openspace-uiuc-server.vercel.app"
+
 function App() {
     const [busyness, setBusyness] = useState(-1);
     const [progress, setProgress] = useState(-1);
@@ -16,7 +18,7 @@ function App() {
         document.title = "OpenSpace";
 
         const controller = new AbortController();
-        axios.get("http://127.0.0.1:5000/building", {
+        axios.get(`${SERVER_URL}/building`, {
             signal: controller.signal
         }).then(res => {
             console.log("buildings:", res.data);
@@ -30,7 +32,7 @@ function App() {
     useEffect(() => {
         const controller = new AbortController();
         if (currentBuilding) {
-            axios.get("http://127.0.0.1:5000/building", {
+            axios.get(`${SERVER_URL}/building`, {
                 params: { "name": currentBuilding },
                 signal: controller.signal
             }).then(res => {
@@ -49,7 +51,7 @@ function App() {
     // update db every time busyness changes
     const updateBusyness = (input) => {
         setBusyness(input);
-        axios.post("http://127.0.0.1:5000/building", {
+        axios.post(`${SERVER_URL}/building`, {
             name: currentBuilding,
             busyness: input
         }).then(res => {
